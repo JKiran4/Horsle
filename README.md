@@ -1,6 +1,6 @@
 # Horse-Race-Simulator
 
-horse_race_simulator/ # package
+horse_race_simulator/ # package  
 race_data/ #subpacakge1
 - horse_stats.py
   - create_horse(name, age, speed, weight, favoured): create horse stats
