@@ -14,8 +14,8 @@ race_data/ #subpacakge1
   - create_jockey(name, age, weight, favoured, horse_name): sets up race jockey data
   - generate_race_id(): race id
   - assign_data(): assigns race date
-  - get_info(): displays jockey, race, and date info
-simulation/ #subpackage2
+  - get_info(): displays jockey, race, and date info  
+simulation/ #subpackage2  
   - race_simulation.py
     - simulate_race(horses, track): method to start race
     - update_position(self): update horse's position on the track with a visual representation of the race
