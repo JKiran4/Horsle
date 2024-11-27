@@ -4,6 +4,7 @@
 # Here 'hist' refers to the dataframe that has the historical data from 'https://www.kaggle.com/datasets/gdaley/hkracing'
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ''' Updating RaceSimulator class to include a get_times method
 
 import random
@@ -303,6 +304,8 @@ if __name__ == "__main__":
     race.user_interface()
    
 =======
+=======
+>>>>>>> 8d60ecc (Adding race_details.py and race_results.py modules - WIP)
 def generate_race_summary(data, race_id):
     """ Display the race summary in detail."""
     
@@ -449,4 +452,7 @@ elif results_type == 'C':
     get_horse_performance(data, hist, horse_id_input)
 
 
+<<<<<<< HEAD
+>>>>>>> 8d60ecc (Adding race_details.py and race_results.py modules - WIP)
+=======
 >>>>>>> 8d60ecc (Adding race_details.py and race_results.py modules - WIP)
