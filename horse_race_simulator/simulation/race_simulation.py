@@ -76,8 +76,7 @@ class race_simulator:
         self.race_setup()
         self.screen.ontimer(self.update_position, 50)
 
-
-# Assuming the classes for horses and track are properly defined as in your setup
+# make sure to store into data frame for four time intervals - and average race speed
 horses = Horse.create_horse("runs.csv")
 track = track_data()
 track.create_track()
