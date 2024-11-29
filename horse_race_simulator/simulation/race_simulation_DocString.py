@@ -7,16 +7,27 @@ from track_data import TrackData
 from horse_stats import Horse
 
 class RaceSimulator:
+    """A class representing race simulation
+    Methods:
+        __init__(): Initializes simulation
+        draw_track(): Creates track imagery
+        race_setup(): Sets up screen and horses for race
+        update_position(): Moves horses through race
+        start_race(): Starts and times race
+    """
     def __init__(self, race, track):
-        """A class representing race simulation
-        Args:
-           race: track details passed in from track_data.py module
-           track: track details passed in from track_data.py module
-        Methods:
-            draw_track(): Creates track imagery used for simulation.
-            race_setup(): Sets up screen and horses for race.
-            update_position(): Moves horses through race.
-            start_race(): Starts and times race.
+        """Initializes RaceSimulator
+        Attributes:
+            screen: Generates race screen
+            track: Contains venue and weather factors
+            horses: Contains horse objects for race
+            horse_objects: Objects representing each horse
+            finish_line: Establishes finish line on track
+            finished_horses: List of horses finishing the race
+            start_time: Start time of race
+            race_data: Dictionary containing race data
+            leg_markers: Marker positions for legs of race
+            final_results: Dictionary of final horse race results
         """
         self.screen = turtle.Screen()
         self.track = track
@@ -30,9 +41,9 @@ class RaceSimulator:
         self.final_results = {}  # Dictionary to store final results
 
     def draw_track(self, scaled_length):
-         """Draws track imagery used for race simulation.
+         """Creates track imagery used for race simulation.
         Args:
-            scaled_length (float): Scaled length of the track used to show horse movement during race.
+            scaled_length (float): Scaled length of the track used to show horse movement during race
         Returns:
             None
         """
@@ -85,7 +96,7 @@ class RaceSimulator:
         Args:
            self: RaceSimulator
         Returns:
-            None
+           None
         """
         # Set up screen
         self.screen.title("Horse Race Simulation")
