@@ -156,6 +156,17 @@ class RaceSimulator:
         self.race_setup()
         self.screen.ontimer(self.update_position, 50)
 
+    def get_times(self):
+        times = {}
+        for horse_id, result in self.final_results.items():
+            times[horse_id] = {
+                "Overall Time": result["overall_time"],
+                "Leg 1 Time": result["leg_times"]["First Leg"],
+                "Leg 2 Time": result["leg_times"]["Second Leg"],
+                "Leg 3 Time": result["leg_times"]["Third Leg"],
+            }
+        return times
+
 # test
 if __name__ == "__main__":
     track = TrackData()
@@ -172,8 +183,9 @@ if __name__ == "__main__":
     race = RaceSimulator(race_details, track)
     race.start_race()
     turtle.mainloop()
-    print("\nRace Results:")
-    for horse_id, result in race.final_results.items():
-        print(f"Horse {horse_id}: Position: {result['final_position']}, "
-              f"Overall Time: {result['overall_time']}s, "
-              f"Leg Times: {result['leg_times']}")
+    # print("\nRace Results:")
+    # for horse_id, result in race.final_results.items():
+    #     print(f"Horse {horse_id}: Position: {result['final_position']}, "
+    #           f"Overall Time: {result['overall_time']}s, "
+    #           f"Leg Times: {result['leg_times']}")
+    print(race.get_times())
