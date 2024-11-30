@@ -206,6 +206,23 @@ class RaceSimulator:
         self.race_setup()
         self.screen.ontimer(self.update_position, 50)
 
+    def get_times(self):
+        """Returns a dictionary of race times for each horse
+        Args:
+           self: RaceSimulator
+        Returns:
+           dict: times (Dictionary of horse IDs and leg times from race)
+        """
+        times = {}
+        for horse_id, result in self.final_results.items():
+            times[horse_id] = {
+                "Overall Time": result["overall_time"],
+                "Leg 1 Time": result["leg_times"]["First Leg"],
+                "Leg 2 Time": result["leg_times"]["Second Leg"],
+                "Leg 3 Time": result["leg_times"]["Third Leg"],
+            }
+        return times
+
 # test
 if __name__ == "__main__":
     track = TrackData()
