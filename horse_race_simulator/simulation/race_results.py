@@ -1,165 +1,104 @@
-# race_results.py - Work-in-progress version
 
 # Here 'data' refers to the dataframe that has the simulated race data
 # Here 'hist' refers to the dataframe that has the historical data from 'https://www.kaggle.com/datasets/gdaley/hkracing'
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-''' Updating RaceSimulator class to include a get_times method
-
-import random
-import turtle
-from race_details import Race
-from track_data import TrackData
-from horse_stats import Horse
-
-class RaceSimulator:
-    def __init__(self, race, track):
-        self.screen = turtle.Screen()
-        self.track = track
-        self.horses = race.horses
-        self.horse_objects = []
-        self.finish_line = None
-        self.finished_horses = []
-        self.finish_times = {}
-        self.timer = 0.0
-
-    def race_setup(self):
-        self.screen.title("Horse Race Simulation")
-        self.screen.bgcolor("DarkGreen")
-        self.screen.setup(width=800, height=600)
-
-        track_length = self.track.track_venue[1]  # Get distance from track module
-        scale = 0.3
-        scaled_length = scale * track_length  # Scale length to fit window
-        self.finish_line = scaled_length / 2  # Set the finish line
-
-        track = turtle.Turtle()
-        track.penup()
-        track.goto(-scaled_length / 2, 150)
-        track.pendown()
-        track.setheading(0)
-        track.forward(scaled_length)
-
-        track.penup()
-        track.goto(-scaled_length / 2, -150)
-        track.pendown()
-        track.setheading(0)
-        track.forward(scaled_length)
-        track.hideturtle()
-
-        finish_line_turtle = turtle.Turtle()
-        finish_line_turtle.penup()
-        finish_line_turtle.goto(self.finish_line, 150)
-        finish_line_turtle.setheading(270)
-        finish_line_turtle.pendown()
-        finish_line_turtle.color("white")
-        finish_line_turtle.width(10)
-        finish_line_turtle.forward(300)
-        finish_line_turtle.hideturtle()
-
-        colors = ['chocolate4', 'brown3', 'DarkGoldenrod3', 'black', 'burlywood3']
-        y_positions = [-100, -50, 0, 50, 100]
-
-        for i, horse in enumerate(self.horses):
-            horse.speed = max(horse.speed, 5)
-            turtle_horse = turtle.Turtle()
-            turtle_horse.shape("turtle")
-            turtle_horse.color(colors[i % len(colors)])
-            turtle_horse.penup()
-            turtle_horse.goto(-scaled_length / 2, y_positions[i])  # Start from left
-            self.horse_objects.append((turtle_horse, horse))
-
-    def end_race(self):
-        print("All horses have crossed the finish line.")
-        self.screen.ontimer(self.screen.bye, 1000)
-
-    def update_position(self):
-        all_horses_finished = True
-        weather_multiplier = self.track.track_weather[1]
-        self.timer += 50
-
-        for turtle_horse, horse in self.horse_objects:
-            if turtle_horse not in self.finished_horses:
-                rand_chance = random.random()
-                if rand_chance < 0.05:
-                    move_distance = 0
-                elif rand_chance < 0.20:
-                    move_distance = (horse.speed * weather_multiplier) * 0.1
-                else:
-                    move_distance = horse.speed * 0.1
-
-                if move_distance < 0:
-                    move_distance = 0
-
-                turtle_horse.forward(move_distance)
-
-                if turtle_horse.xcor() >= self.finish_line and turtle_horse not in self.finished_horses:
-                    print(f"Horse {horse.horse_id} has crossed the finish line!")
-                    self.finished_horses.append(turtle_horse)
-                    self.finish_times[horse.horse_id] = self.timer
-
-            if turtle_horse not in self.finished_horses:
-                all_horses_finished = False
-
-        if all_horses_finished:
-            self.end_race()
-        else:
-            self.screen.ontimer(self.update_position, 50)
-
-    def start_race(self):
-        self.race_setup()
-        self.screen.ontimer(self.update_position, 50)
-
-    def get_times(self):
-        print(self.finish_times)
-        return self.finish_times
-       
-
-'''
-
 import pandas as pd
 
-class RaceResults(RaceSimulator):
+class RaceResults:
 
-    def __init__(self, race, track):
-        RaceSimulator.__init__(self, race, track)
+    hist = pd.read_csv('runs.csv')
+    track_length = 50
+
+    def __init__(self, race, horses, horse_timings):
         self.race_id = race.race_id
-        self.data = race.date
-        self.results_type = ''
-        self.data = RaceSimulator.get_times(self) # retreive a dictionary of {horse id : finish times}
+        self.date = race.date
+        self.horses = horses
+        self.data = self.get_horse_timing_data_farme(horse_timings)
 
-    hist = pd.read_excel('runs.xlsx')
-    
-    #convert dictionary to dataframe
-    
-    horse_id = []
-    finish_time = []
-    for key,value in self.data.items():
-        horse_id.append(key)
-        finish_time.append(value)
+    def get_horse_timing_data_farme(self, horse_timings):
+        min_finish_time_overall = min(horse_timings.items(), key=lambda item: item[1]['Overall Time'])[1]['Overall Time'];
+        min_finish_time_first_leg = min(horse_timings.items(), key=lambda item: item[1]['Leg 1 Time'])[1]['Leg 1 Time'];
+        min_finish_time_second_leg = min(horse_timings.items(), key=lambda item: item[1]['Leg 2 Time'])[1]['Leg 2 Time'];
+        min_finish_time_third_leg = min(horse_timings.items(), key=lambda item: item[1]['Leg 3 Time'])[1]['Leg 3 Time'];
+        
+        horse_ids = []
+        step1_loaction = []
+        step2_loaction = []
+        step3_loaction = []
+        step4_loaction = []
+        final_position = []
+        finish_times = []
+        poisition = 1;
+        for horse_id, timings in horse_timings.items():
+            horse_ids.append(horse_id)
+            step1_loaction.append(RaceResults.track_length * 0.25 * (min_finish_time_first_leg/timings['Leg 1 Time']))
+            step2_loaction.append(RaceResults.track_length * 0.5 * (min_finish_time_second_leg/timings['Leg 2 Time']))
+            step3_loaction.append(RaceResults.track_length * 0.75 * (min_finish_time_third_leg/timings['Leg 3 Time']))
+            step4_loaction.append(RaceResults.track_length * (min_finish_time_overall/timings['Overall Time']))
+            finish_times.append(timings['Overall Time'])
+            final_position.append(self.get_horse_position(horse_timings, horse_id))
+            poisition += 1
 
-    data_set = {'horse_id': horse_id, 'finish_time': finish_time}
-    data = pd.DataFrame(data_set)
+        print(step1_loaction)
+        print(step2_loaction)
+        print(step3_loaction)
+        print(step4_loaction)
+        horse_timing_data_set = {'horse_id': horse_ids, 'steps1': step1_loaction, 'steps2': step2_loaction, 'steps3': step3_loaction, 'steps4': step4_loaction,'result': final_position, 'finish_time': finish_times}
+        return pd.DataFrame(horse_timing_data_set)
+
+    def get_horse_position(self, horse_timings, horse_id):
+        sorted_horses = sorted(horse_timings.items(), key=lambda item: item[1]['Overall Time'])
+    
+        # Find the position of the specified horse
+        for position, (current_horse_id, _) in enumerate(sorted_horses, start=1):
+            if current_horse_id == horse_id:
+                return position
+    
+        # If the horse_id is not found, return -1
+        return -1
       
-    def user_interface(self):
-        self.results_type = input(
-        """Choose type of results to show:\n
-        A: Leaderboard\n 
-        B: Overall summary\n 
-        C: Horse performance\n 
-        Enter your response:""")
-        if self.results_type == 'A':
-            display_leaderboard(self)
-        elif self.results_type == 'B':
-            generate_race_summary(self,hist)
-        elif self.results_type == 'C':
-            return None
-           # horse_id_input = int(input("Enter horse id to view results: "))
-           # get_horse_performance(self, hist, horse_id_input)
+    def display_options(self):
+        while True:
+            results_type = input(
+            """
+        
+            Choose type of results to show:\n
+            A: Leaderboard\n 
+            B: Overall summary\n 
+            C: Compare horse performance\n 
+            D: Exit\n
+            Enter your response:""")
+            if results_type == 'A':
+                self.display_leaderboard()
+            elif results_type == 'B':
+                self.generate_race_summary()
+            elif results_type == 'C':
+                self.get_horse_performance()
+            elif results_type == 'D':
+                return None
 
-    def generate_race_summary(self,data):
+    def display_leaderboard(self):
+        """creates a visual display for the horses and their corresponding performance after the race."""
+           
+        #Store in dataframe.
+        sub_df = self.data[['result','horse_id','finish_time']].copy()
+        sub_df = sub_df.sort_values(by='finish_time').copy().reset_index(drop=True)  
+        position = sub_df['result']
+        horse = sub_df['horse_id']
+        finish_time = sub_df['finish_time']
+        
+        # Display the leaderboard
+        print(f"🏇 Horse Race Leaderboard : {self.race_id}🏇")
+        print("------------------------------------------------------------")
+        print(f"{'Position':<10}{'Horse':<15}{'Time (s)':<10}")
+        print("------------------------------------------------------------")
+        for i in range(len(self.horses)):
+            print(f"{position[i]:<10}{horse[i]:<15}{finish_time[i]:<10}")
+    
+        # Winner announcement
+        print(f"\n🎉 Winner: {horse[0]} with a time of {finish_time[0]/1000} seconds! 🎉")
+
+    def generate_race_summary(self):
         """ Display the race summary in detail includes attributes previously defined."""
         
         # Display the Performance results
@@ -168,17 +107,13 @@ class RaceResults(RaceSimulator):
         
         # Display all race attributes
         print(f" Date : {self.date}")
-        
-        print(f" Number of horses : {len(self.finish_times)}")
-        
-        print(f" Finish time of winner: {data['finish_time'].max()} seconds")
-        print(f" Finish time of last horse: {data['finish_time'].min()} seconds")
-    
+        print(f" Number of horses : {len(self.horses)}")
+        print(f" Finish time of winner: {self.data['finish_time'].min()/1000} seconds")
+        print(f" Finish time of last horse: {self.data['finish_time'].max()/1000} seconds")
          
-        # Add visualizations (static and dynamic???)
+        # Add visualizations
         
-        track_length = 101
-        horses = data['horse_id']
+        horses = self.data['horse_id']
         positions = [0]* len(horses) # Starting positions
         
         print("\n🏁 Race Snapshot 🏁")
@@ -186,387 +121,80 @@ class RaceResults(RaceSimulator):
         # Print race for each stage
         print('\nStage 1:\n')
         # Update positions 
-        step1 = data['steps1'].astype(int)
-        for i in range(len(data)):
-            positions[i] += step1[i] 
+        step1 = self.data['steps1'].astype(int)
+        for i in range(len(self.data)):
+            positions[i] = step1[i] 
         
         # Display the race track
         for i, horse in enumerate(horses):
-            print(f"{horse}: " + "-" * positions[i] + "🐎" + "-" * (track_length - positions[i]))
+            print(f"{horse}: " + "-" * positions[i] + "🐎" + "-" * (RaceResults.track_length - positions[i]))
         
         print('\nStage 2:\n')
-        step2 = data['steps2'].astype(int)
-        for i in range(len(data)):
-            positions[i] += step2[i]  
+        step2 = self.data['steps2'].astype(int)
+        for i in range(len(self.data)):
+            positions[i] = step2[i]  
         
         # Display the race track
         for i, horse in enumerate(horses):
-            print(f"{horse}: " + "-" * positions[i] + "🐎" + "-" * (track_length - positions[i]))
+            print(f"{horse}: " + "-" * positions[i] + "🐎" + "-" * (RaceResults.track_length - positions[i]))
         
         
         print('\nStage 3:\n')
-        step3 = data['steps3'].astype(int)
-        for i in range(len(data)):
-            positions[i] += step3[i]  
+        step3 = self.data['steps3'].astype(int)
+        for i in range(len(self.data)):
+            positions[i] = step3[i]  
         
         # Display the race track
         for i, horse in enumerate(horses):
-            print(f"{horse}: " + "-" * positions[i] + "🐎" + "-" * (track_length - positions[i]))
+            print(f"{horse}: " + "-" * positions[i] + "🐎" + "-" * (RaceResults.track_length - positions[i]))
         
         print('\nStage 4:\n')
-        step4 = data['steps4'].astype(int)
-        for i in range(len(data)):
-            positions[i] += step4[i]  
+        step4 = self.data['steps4'].astype(int)
+        for i in range(len(self.data)):
+            positions[i] = step4[i]  
         
         # Display the race track
         for i, horse in enumerate(horses):
-            print(f"{horse}: " + "-" * positions[i] + "🐎" + "-" * (track_length - positions[i]))
+            print(f"{horse}: " + "-" * positions[i] + "🐎" + "-" * (RaceResults.track_length - positions[i]))
         
-    def get_horse_performance(self, data, hist):
+    def get_horse_performance(self):
         """ Retrieve performance summary for a specific horse, can be called for every horse in the race """
-        
-        horse_id_input = int(input("Enter horse id to view results: "))
-        
-        # Current race
-        finish_time = data.loc[data['horse_id'] == horse_id,'finish_time'].iloc[0]
-        rating = data.loc[data['horse_id'] == horse_id,'horse_rating'].iloc[0]
-        rank = data.loc[data['horse_id'] == horse_id,'result'].iloc[0]
-        win_odds = data.loc[data['horse_id'] == horse_id,'win_odds'].iloc[0]
-            
-        # Historical data for comparison
-        average_finish_time = hist[hist['horse_id'] == horse_id]['finish_time'].mean()
-        average_rating = hist[hist['horse_id'] == horse_id]['horse_rating'].mean()
-        average_win_odds = hist[hist['horse_id'] == horse_id]['win_odds'].mean()
-        win_count = hist[(hist['horse_id'] == horse_id) & (hist['won'] == 1)]['horse_id'].count()
-        average_rank = round(hist[hist['horse_id'] == horse_id]['result'].mean())
-        number_of_races = hist[hist['horse_id'] == horse_id]['race_id'].nunique()
-        win_ratio = (win_count/number_of_races)*100
-        
-        # Display the Performance results
-        print(f"🏇 Horse Performance : {horse_id} 🏇")
-        print("------------------------------------------------------------")
-        
-        # Display all horse attributes
-        print(f" {'Horse age:':<20} {data.loc[data['horse_id'] == horse_id,'horse_age'].iloc[0]}")
-        print(f" {'Horse country:':<20} {data.loc[data['horse_id'] == horse_id,'horse_country'].iloc[0]}")
-        print(f" {'Horse type:':<20} {data.loc[data['horse_id'] == horse_id,'horse_type'].iloc[0]}")
-        print(f" Weight: {data.loc[data['horse_id'] == horse_id,'actual_weight'].iloc[0]}")
-        print(f" Jockey: {data.loc[data['horse_id'] == horse_id,'jockey_id'].iloc[0]}")
-        print(f" Historical Win count: {win_count} of {number_of_races} races [Win ratio of {win_ratio:.2f}%] ")
-    
-        # Display table
-        print("------------------------------------------------------------")
-        print(f"{'Metric':<20}{'Current race':<20}{'Past performance':<20}")
-        print("------------------------------------------------------------")
-        print(f"{'Finish time':<20}{round(finish_time,2):<20}{round(average_finish_time,2):<20}")
-        print(f"{'Rank':<20}{rank:<20}{average_rank:<20}")
-        print(f"{'Rating':<20}{rating:<20}{round(average_rating):<20}")
-        print(f"{'Win Odds':<20}{round(win_odds,2):<20}{round(average_win_odds,2):<20}")
-        
-    def display_leaderboard(self, data):
-        """creates a visual display for the horses and their corresponding performance after the race."""
-           
-        #Store in dictionary or dataframe.
-        sub_df = data[['result','horse_id','finish_time']].copy()
-        sub_df = sub_df.sort_values(by='finish_time').copy().reset_index(drop=True)  
+        sub_df = self.data[['result','horse_id']].copy()
+        sub_df = sub_df.sort_values(by='result').copy().reset_index(drop=True)  
         position = sub_df['result']
         horse = sub_df['horse_id']
-        finish_time = sub_df['finish_time']
         
-        # Display the leaderboard
-        print(f"🏇 Horse Race Leaderboard : {race_id}🏇") # add date/time
+        print(f"🏇 Horse IDs 🏇")
         print("------------------------------------------------------------")
-        
-        print(f"{'Position':<10}{'Horse':<15}{'Time (s)':<10}")
+        print(f"{'Position':<10}{'Horse':<15}")
         print("------------------------------------------------------------")
-        for i in range(14):
-            print(f"{position[i]:<10}{horse[i]:<15}{finish_time[i]:<10}")
-    
-        # Winner announcement
-        print(f"\n🎉 Winner: {horse[0]} with a time of {finish_time[0]} seconds! 🎉")
-        
-# Test code
-
-if __name__ == "__main__":
-    track = TrackData()
-    track.create_track()
-    track.weather_factor()
-
-    race_details = Race(date="2024-12-01", venue=track.track_venue[0], distance=track.track_venue[1], prize=5000, num_horses=5)
-    horses = Horse.create_horse("runs.csv", race_details.num_horses)
-    race_details.horses = horses
-
-    print(race_details.get_race_info())
-    print(horses.display_horses())
-    race = RaceResults(race_details, track)
-    race.start_race()
-    turtle.mainloop()
-    race.get_times()
-    race.user_interface()
-   
-=======
-=======
->>>>>>> 8d60ecc (Adding race_details.py and race_results.py modules - WIP)
-def generate_race_summary(data, race_id):
-    """ Display the race summary in detail."""
-    
-    # Display the Performance results
-    print(f"🏇 Race summary : {race_id} 🏇")
-    print("------------------------------------------------------------")
-    
-    # Display all race attributes
-    print(f" Date : {None}")
-    print(f" Number of horses : {data['horse_id'].count()}")
-    print(f" Finish time of winner: {data['finish_time'].max()} seconds")
-    print(f" Finish time of last horse: {data['finish_time'].min()} seconds")
-=======
-''' Updating RaceSimulator class to include a get_times method
->>>>>>> cb7a81b (Changes to race_results.py)
-
-import random
-import turtle
-from race_details import Race
-from track_data import TrackData
-from horse_stats import Horse
-
-class RaceSimulator:
-    def __init__(self, race, track):
-        self.screen = turtle.Screen()
-        self.track = track
-        self.horses = race.horses
-        self.horse_objects = []
-        self.finish_line = None
-        self.finished_horses = []
-        self.finish_times = {}
-        self.timer = 0.0
-
-    def race_setup(self):
-        self.screen.title("Horse Race Simulation")
-        self.screen.bgcolor("DarkGreen")
-        self.screen.setup(width=800, height=600)
-
-        track_length = self.track.track_venue[1]  # Get distance from track module
-        scale = 0.3
-        scaled_length = scale * track_length  # Scale length to fit window
-        self.finish_line = scaled_length / 2  # Set the finish line
-
-        track = turtle.Turtle()
-        track.penup()
-        track.goto(-scaled_length / 2, 150)
-        track.pendown()
-        track.setheading(0)
-        track.forward(scaled_length)
-
-        track.penup()
-        track.goto(-scaled_length / 2, -150)
-        track.pendown()
-        track.setheading(0)
-        track.forward(scaled_length)
-        track.hideturtle()
-
-        finish_line_turtle = turtle.Turtle()
-        finish_line_turtle.penup()
-        finish_line_turtle.goto(self.finish_line, 150)
-        finish_line_turtle.setheading(270)
-        finish_line_turtle.pendown()
-        finish_line_turtle.color("white")
-        finish_line_turtle.width(10)
-        finish_line_turtle.forward(300)
-        finish_line_turtle.hideturtle()
-
-        colors = ['chocolate4', 'brown3', 'DarkGoldenrod3', 'black', 'burlywood3']
-        y_positions = [-100, -50, 0, 50, 100]
-
-        for i, horse in enumerate(self.horses):
-            horse.speed = max(horse.speed, 5)
-            turtle_horse = turtle.Turtle()
-            turtle_horse.shape("turtle")
-            turtle_horse.color(colors[i % len(colors)])
-            turtle_horse.penup()
-            turtle_horse.goto(-scaled_length / 2, y_positions[i])  # Start from left
-            self.horse_objects.append((turtle_horse, horse))
-
-    def end_race(self):
-        print("All horses have crossed the finish line.")
-        self.screen.ontimer(self.screen.bye, 1000)
-
-    def update_position(self):
-        all_horses_finished = True
-        weather_multiplier = self.track.track_weather[1]
-        self.timer += 50
-
-        for turtle_horse, horse in self.horse_objects:
-            if turtle_horse not in self.finished_horses:
-                rand_chance = random.random()
-                if rand_chance < 0.05:
-                    move_distance = 0
-                elif rand_chance < 0.20:
-                    move_distance = (horse.speed * weather_multiplier) * 0.1
-                else:
-                    move_distance = horse.speed * 0.1
-
-                if move_distance < 0:
-                    move_distance = 0
-
-                turtle_horse.forward(move_distance)
-
-                if turtle_horse.xcor() >= self.finish_line and turtle_horse not in self.finished_horses:
-                    print(f"Horse {horse.horse_id} has crossed the finish line!")
-                    self.finished_horses.append(turtle_horse)
-                    self.finish_times[horse.horse_id] = self.timer
-
-            if turtle_horse not in self.finished_horses:
-                all_horses_finished = False
-
-        if all_horses_finished:
-            self.end_race()
-        else:
-            self.screen.ontimer(self.update_position, 50)
-
-    def start_race(self):
-        self.race_setup()
-        self.screen.ontimer(self.update_position, 50)
-
-    def get_times(self):
-        print(self.finish_times)
-        return self.finish_times
-       
-
-'''
-
-import pandas as pd
-
-class RaceResults(RaceSimulator):
-
-    def __init__(self, race, track):
-        RaceSimulator.__init__(self, race, track)
-        self.race_id = race.race_id
-        self.data = race.date
-        self.results_type = ''
-        self.data = RaceSimulator.get_times(self) # retreive a dictionary of {horse id : finish times}
-
-    hist = pd.read_excel('runs.xlsx')
-    
-    #convert dictionary to dataframe
-    
-    horse_id = []
-    finish_time = []
-    for key,value in self.data.items():
-        horse_id.append(key)
-        finish_time.append(value)
-
-    data_set = {'horse_id': horse_id, 'finish_time': finish_time}
-    data = pd.DataFrame(data_set)
-      
-    def user_interface(self):
-        self.results_type = input(
-        """Choose type of results to show:\n
-        A: Leaderboard\n 
-        B: Overall summary\n 
-        C: Horse performance\n 
-        Enter your response:""")
-        if self.results_type == 'A':
-            display_leaderboard(self)
-        elif self.results_type == 'B':
-            generate_race_summary(self,hist)
-        elif self.results_type == 'C':
+        for i in range(len(self.horses)):
+            print(f"{position[i]:<10}{horse[i]:<15}")
+            
+        horse_id_input = int(input("\nEnter a horse id to compare performance with past results or enter to exit: "))
+        if horse_id_input == '':
             return None
-           # horse_id_input = int(input("Enter horse id to view results: "))
-           # get_horse_performance(self, hist, horse_id_input)
-
-    def generate_race_summary(self,data):
-        """ Display the race summary in detail includes attributes previously defined."""
-        
-        # Display the Performance results
-        print(f"🏇 Race summary : {self.race_id} 🏇")
-        print("------------------------------------------------------------")
-        
-        # Display all race attributes
-        print(f" Date : {self.date}")
-        
-        print(f" Number of horses : {len(self.finish_times)}")
-        
-        print(f" Finish time of winner: {data['finish_time'].max()} seconds")
-        print(f" Finish time of last horse: {data['finish_time'].min()} seconds")
-    
-         
-        # Add visualizations (static and dynamic???)
-        
-        track_length = 101
-        horses = data['horse_id']
-        positions = [0]* len(horses) # Starting positions
-        
-        print("\n🏁 Race Snapshot 🏁")
-        print("------------------------------------------------------------")
-        # Print race for each stage
-        print('\nStage 1:\n')
-        # Update positions 
-        step1 = data['steps1'].astype(int)
-        for i in range(len(data)):
-            positions[i] += step1[i] 
-        
-        # Display the race track
-        for i, horse in enumerate(horses):
-            print(f"{horse}: " + "-" * positions[i] + "🐎" + "-" * (track_length - positions[i]))
-        
-        print('\nStage 2:\n')
-        step2 = data['steps2'].astype(int)
-        for i in range(len(data)):
-            positions[i] += step2[i]  
-        
-        # Display the race track
-        for i, horse in enumerate(horses):
-            print(f"{horse}: " + "-" * positions[i] + "🐎" + "-" * (track_length - positions[i]))
-        
-        
-        print('\nStage 3:\n')
-        step3 = data['steps3'].astype(int)
-        for i in range(len(data)):
-            positions[i] += step3[i]  
-        
-        # Display the race track
-        for i, horse in enumerate(horses):
-            print(f"{horse}: " + "-" * positions[i] + "🐎" + "-" * (track_length - positions[i]))
-        
-        print('\nStage 4:\n')
-        step4 = data['steps4'].astype(int)
-        for i in range(len(data)):
-            positions[i] += step4[i]  
-        
-        # Display the race track
-        for i, horse in enumerate(horses):
-            print(f"{horse}: " + "-" * positions[i] + "🐎" + "-" * (track_length - positions[i]))
-        
-    def get_horse_performance(self, data, hist):
-        """ Retrieve performance summary for a specific horse, can be called for every horse in the race """
-        
-        horse_id_input = int(input("Enter horse id to view results: "))
         
         # Current race
-        finish_time = data.loc[data['horse_id'] == horse_id,'finish_time'].iloc[0]
-        rating = data.loc[data['horse_id'] == horse_id,'horse_rating'].iloc[0]
-        rank = data.loc[data['horse_id'] == horse_id,'result'].iloc[0]
-        win_odds = data.loc[data['horse_id'] == horse_id,'win_odds'].iloc[0]
+        finish_time = self.data.loc[self.data['horse_id'] == horse_id_input,'finish_time'].iloc[0]
+        rank = self.data.loc[self.data['horse_id'] == horse_id_input,'result'].iloc[0]
             
         # Historical data for comparison
-        average_finish_time = hist[hist['horse_id'] == horse_id]['finish_time'].mean()
-        average_rating = hist[hist['horse_id'] == horse_id]['horse_rating'].mean()
-        average_win_odds = hist[hist['horse_id'] == horse_id]['win_odds'].mean()
-        win_count = hist[(hist['horse_id'] == horse_id) & (hist['won'] == 1)]['horse_id'].count()
-        average_rank = round(hist[hist['horse_id'] == horse_id]['result'].mean())
-        number_of_races = hist[hist['horse_id'] == horse_id]['race_id'].nunique()
+        average_finish_time = RaceResults.hist[RaceResults.hist['horse_id'] == horse_id_input]['finish_time'].mean()
+        win_count = RaceResults.hist[(RaceResults.hist['horse_id'] == horse_id_input) & (RaceResults.hist['won'] == 1)]['horse_id'].count()
+        average_rank = round(RaceResults.hist[RaceResults.hist['horse_id'] == horse_id_input]['result'].mean())
+        number_of_races = RaceResults.hist[RaceResults.hist['horse_id'] == horse_id_input]['race_id'].nunique()
         win_ratio = (win_count/number_of_races)*100
         
         # Display the Performance results
-        print(f"🏇 Horse Performance : {horse_id} 🏇")
+        print(f"🏇 Horse Performance : {horse_id_input} 🏇")
         print("------------------------------------------------------------")
         
         # Display all horse attributes
-        print(f" {'Horse age:':<20} {data.loc[data['horse_id'] == horse_id,'horse_age'].iloc[0]}")
-        print(f" {'Horse country:':<20} {data.loc[data['horse_id'] == horse_id,'horse_country'].iloc[0]}")
-        print(f" {'Horse type:':<20} {data.loc[data['horse_id'] == horse_id,'horse_type'].iloc[0]}")
-        print(f" Weight: {data.loc[data['horse_id'] == horse_id,'actual_weight'].iloc[0]}")
-        print(f" Jockey: {data.loc[data['horse_id'] == horse_id,'jockey_id'].iloc[0]}")
+        print(f" {'Horse age:':<20} {self.get_horse_age(horse_id_input)}")
+        print(f" {'Horse type:':<20} {self.get_horse_type(horse_id_input)}")
+        print(f" Weight: {self.get_horse_weight(horse_id_input)}")
+        print(f" Jockey: {self.get_horse_jockey(horse_id_input)}")
         print(f" Historical Win count: {win_count} of {number_of_races} races [Win ratio of {win_ratio:.2f}%] ")
     
         # Display table
@@ -575,30 +203,30 @@ class RaceResults(RaceSimulator):
         print("------------------------------------------------------------")
         print(f"{'Finish time':<20}{round(finish_time,2):<20}{round(average_finish_time,2):<20}")
         print(f"{'Rank':<20}{rank:<20}{average_rank:<20}")
-        print(f"{'Rating':<20}{rating:<20}{round(average_rating):<20}")
-        print(f"{'Win Odds':<20}{round(win_odds,2):<20}{round(average_win_odds,2):<20}")
         
-    def display_leaderboard(self, data):
-        """creates a visual display for the horses and their corresponding performance after the race."""
-           
-        #Store in dictionary or dataframe.
-        sub_df = data[['result','horse_id','finish_time']].copy()
-        sub_df = sub_df.sort_values(by='finish_time').copy().reset_index(drop=True)  
-        position = sub_df['result']
-        horse = sub_df['horse_id']
-        finish_time = sub_df['finish_time']
-        
-        # Display the leaderboard
-        print(f"🏇 Horse Race Leaderboard : {race_id}🏇") # add date/time
-        print("------------------------------------------------------------")
-        
-        print(f"{'Position':<10}{'Horse':<15}{'Time (s)':<10}")
-        print("------------------------------------------------------------")
-        for i in range(14):
-            print(f"{position[i]:<10}{horse[i]:<15}{finish_time[i]:<10}")
-    
-        # Winner announcement
-        print(f"\n🎉 Winner: {horse[0]} with a time of {finish_time[0]} seconds! 🎉")
+    def get_horse_age(self, horse_id):
+        for horse in self.horses:
+            if horse.horse_id == horse_id:
+                return horse.horse_age
+        return None  # Return None if the horse_id is not found
+
+    def get_horse_type(self, horse_id):
+        for horse in self.horses:
+            if horse.horse_id == horse_id:
+                return horse.horse_type
+        return None  # Return None if the horse_id is not found
+
+    def get_horse_weight(self, horse_id):
+        for horse in self.horses:
+            if horse.horse_id == horse_id:
+                return horse.actual_weight
+        return None  # Return None if the horse_id is not found
+
+    def get_horse_jockey(self, horse_id):
+        for horse in self.horses:
+            if horse.horse_id == horse_id:
+                return horse.jockey_id
+        return None  # Return None if the horse_id is not found
         
 # Test code
 
@@ -606,23 +234,18 @@ if __name__ == "__main__":
     track = TrackData()
     track.create_track()
     track.weather_factor()
-
+    
     race_details = Race(date="2024-12-01", venue=track.track_venue[0], distance=track.track_venue[1], prize=5000, num_horses=5)
     horses = Horse.create_horse("runs.csv", race_details.num_horses)
-    race_details.horses = horses
-
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 8d60ecc (Adding race_details.py and race_results.py modules - WIP)
-=======
->>>>>>> 8d60ecc (Adding race_details.py and race_results.py modules - WIP)
-=======
-    print(race_details.get_race_info())
-    print(horses.display_horses())
-    race = RaceResults(race_details, track)
-    race.start_race()
-    turtle.mainloop()
-    race.get_times()
-    race.user_interface()
-   
->>>>>>> cb7a81b (Changes to race_results.py)
+    
+    horse_timings = {}
+    #fixed output for testing
+    horse_timings[horses[1].horse_id] = {'Overall Time': 1200, 'Leg 1 Time': 260, 'Leg 2 Time': 520, 'Leg 3 Time': 780}
+    horse_timings[horses[0].horse_id] = {'Overall Time': 1000, 'Leg 1 Time': 250, 'Leg 2 Time': 500, 'Leg 3 Time': 750}
+    horse_timings[horses[2].horse_id] = {'Overall Time': 1400, 'Leg 1 Time': 270, 'Leg 2 Time': 540, 'Leg 3 Time': 810}
+    horse_timings[horses[4].horse_id] = {'Overall Time': 1100, 'Leg 1 Time': 290, 'Leg 2 Time': 580, 'Leg 3 Time': 870}
+    horse_timings[horses[3].horse_id] = {'Overall Time': 1300, 'Leg 1 Time': 280, 'Leg 2 Time': 560, 'Leg 3 Time': 840}
+    
+    race_results = RaceResults(race_details, horses, horse_timings)
+    race_results.display_options()
+       
