@@ -5,7 +5,25 @@ class Race:
     num_horses = 10
 
 class Horse:
+     """A class representing a Horse object.
+    Methods:
+        __init__(): Initializes 'Horse' instance.
+        create_horse(): Retreives a sub set of horses from reference data set.
+        update_horse_stats(): Updates a horse's speed.
+        get_horse_info(): Displays horse details.
+    """
     def __init__(self, horse_id, horse_age, actual_weight, horse_type, horse_rating, jockey_id):
+        """
+        Initializes instance of the 'Horse' class.
+    
+        Args:
+            horse_id (int): Horse ID.
+            horse_age (int): Age of horse.  
+            actual_weight (int or float) : Weight of Horse.
+            horse_type (str) : Horse type such Colt, Mare, Gelding etc.
+            horse_rating (int) : Horse rating.
+            jockey_id (int) : Jockey ID.  
+        """
         self.horse_id = horse_id
         self.horse_age = horse_age
         self.actual_weight = actual_weight
@@ -15,6 +33,15 @@ class Horse:
         self.speed = self.update_horse_stats()
 
     def create_horse(csv_filename):
+        """
+        Retreives a sub set of horses from the given data set 'csv_filename'.
+
+        Args:
+            csv_filename : Name of the kaggle data set containing the horse data.
+
+        Returns:
+            list : List of horses.
+        """
         horse_df = pd.read_csv(csv_filename)
 
         horses = []
@@ -40,6 +67,15 @@ class Horse:
 
     # Will incorporate randomization to ensure that values will be different every time?
     def update_horse_stats(self):
+        """
+        Updates a horse's speed based on factors; horse rating, age and actual weight of horse and uses randomization to set speeds that vary with each simulation.
+
+        Args:
+            self : Instance of the class.
+
+        Returns:
+            float : Speed of the horse.
+        """
         random_speed = random.uniform(30.0, 50.0)
         if self.horse_rating > 50:
             random_speed += 5
@@ -52,6 +88,15 @@ class Horse:
         return round(random_speed, 2)
 
     def get_horse_info(self):
+        """
+        Displays horse details for the class instance.
+
+        Args:
+            self : Instance of the class.
+
+        Returns:
+            Prints horse details.
+        """
         print(f'Horse ID: {self.horse_id}, Age: {self.horse_age} years, Weight: {self.actual_weight} lbs, Type: {self.horse_type}, Rating: {self.horse_rating}, Speed: {self.speed}')
 
 
