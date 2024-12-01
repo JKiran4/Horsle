@@ -1,29 +1,30 @@
 # Horse-Race-Simulator
 
 horse_race_simulator/ # package  
-race_data/ #subpacakge1
+race_data/ #subpackage1
 - horse_stats.py
   - create_horse(csv_filename): creates horse stats from data set
   - update_horse_stats(self): updates horse speed based on horse stats
   - get_horse_info(self): display horses stats
 - track_data.py
-  - create_track(length, condition, surface, hurdles, location): sets up the track for racing
-  - weather_factors(self, weather_factors): applies random weather to the track (will impact the race)
-  - get_track_info(self): display track information
+  - create_track(self): randomly selects track venue and corresponding race distance
+  - weather_factors(self): randomly selects weather factors to apply to race, which adjusts horse speed 
+  - get_track_info(self): displays track information
 - race_details.py
-  - create_jockey(name, age, weight, favoured, horse_name): sets up race jockey data
-  - generate_race_id(): race id
-  - assign_data(): assigns race date
-  - get_info(): displays jockey, race, and date info  
+  - set_date(self, date): adjusts race date
+  - get_race_info(self): displays race_id, date, venue, distance, prize, and number of horses
 simulation/ #subpackage2  
   - race_simulation.py
-    - simulate_race(horses, track): method to start race
-    - update_position(self): update horse's position on the track with a visual representation of the race
-    - determine_winner(horses): output winner of the race
+    - draw_track(self, scaled_length): creates track imagery used for race simulation
+    - race_setup(self): sets up race environment - prepares screen, scales track and initializes horses.
+    - update_position(self): updates horse position during race, tracks progress and checks for finish. starts time and applies weather factors.
+    - start_race(self): starts race via race_setup and update_position methods
+    - get_times(self): returns a dictionary of race times for each horse.
   - race_results.py
-    - generate_race_summary(race, data): outputs race results in detail
-    - get_horse_performance(horse): returns performance summary for a specific horse
-    - show_leaderboard(leaders): displays a leaderboard for all horses
+    - user_interface(self): 
+    - generate_race_summary(self, data): 
+    - get_horse_performance(self, data, hist): 
+    - display_leaderboard(self, data):
    - betting.py
      - show_balance(self): shows users current balance
      - take_bet(self, bet, horse_id, horses): user input for bet - if 0 or horse_id invalid, does not accept bets
