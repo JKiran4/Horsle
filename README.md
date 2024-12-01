@@ -1,32 +1,41 @@
 # Horse-Race-Simulator
 
 horse_race_simulator/ # package  
+
 race_data/ #subpackage1
 - horse_stats.py
+  - __init__(self, horse_id, horse_age, actual_weight, horse_type, horse_rating, jockey_id): initialization
   - create_horse(csv_filename): creates horse stats from data set
   - update_horse_stats(self): updates horse speed based on horse stats
   - get_horse_info(self): display horses stats
 - track_data.py
+  - __init__(self): initialization
   - create_track(self): randomly selects track venue and corresponding race distance
   - weather_factors(self): randomly selects weather factors to apply to race, which adjusts horse speed 
   - get_track_info(self): displays track information
 - race_details.py
+  - __init__(self, date, venue, distance, prize, num_horses = 5): initialization
   - set_date(self, date): adjusts race date
   - get_race_info(self): displays race_id, date, venue, distance, prize, and number of horses
+
+
 simulation/ #subpackage2  
-  - race_simulation.py
-    - draw_track(self, scaled_length): creates track imagery used for race simulation
-    - race_setup(self): sets up race environment - prepares screen, scales track and initializes horses.
-    - update_position(self): updates horse position during race, tracks progress and checks for finish. starts time and applies weather factors.
-    - start_race(self): starts race via race_setup and update_position methods
-    - get_times(self): returns a dictionary of race times for each horse.
-  - race_results.py
-    - user_interface(self): 
-    - generate_race_summary(self, data): 
-    - get_horse_performance(self, data, hist): 
-    - display_leaderboard(self, data):
-   - betting.py
-     - show_balance(self): shows users current balance
-     - take_bet(self, bet, horse_id, horses): user input for bet - if 0 or horse_id invalid, does not accept bets
-     - distribute_earnings(self, bet, winning_horse_id, selected_horse_id, odds=2.0): Assesses if selected horse wins race, if wins - adds bet to balance
+- race_simulation.py
+  - __init__(self, race, track): initialization
+  - draw_track(self, scaled_length): creates track imagery used for race simulation
+  - race_setup(self): sets up race environment - prepares screen, scales track and initializes horses.
+  - update_position(self): updates horse position during race, tracks progress and checks for finish. starts time and applies weather factors.
+  - start_race(self): starts race via race_setup and update_position methods
+  - get_times(self): returns a dictionary of race times for each horse.
+- race_results.py
+  - __init__(self, race, track): initialization
+  - user_interface(self): 
+  - generate_race_summary(self, data): 
+  - get_horse_performance(self, data, hist): 
+  - display_leaderboard(self, data):
+- betting.py
+  - __init__(self, start_balance=1000): initialization
+  - show_balance(self): shows users current balance
+  - take_bet(self, bet, horse_id, horses): user input for bet - if 0 or horse_id invalid, does not accept bets
+  - distribute_earnings(self, bet, winning_horse_id, selected_horse_id, odds=2.0): Assesses if selected horse wins race, if wins - adds bet to balance
 
