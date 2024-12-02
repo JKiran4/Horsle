@@ -1,8 +1,4 @@
-#IN PROGRESS - KS
-
-# Creating temporary Race class - will be supplied by Amali
-class Race:
-    num_horses = 10
+# Data used to generate information imported from 'https://www.kaggle.com/datasets/gdaley/hkracing'
 
 class Horse:
     def __init__(self, horse_id, horse_age, actual_weight, horse_type, horse_rating, jockey_id):
@@ -19,10 +15,9 @@ class Horse:
 
         horses = []
 
-        # Update requested by group member to incorportate number of horses instead of hard-coding
         num_horses = Race.num_horses
 
-        while len(horses) < num_horses: # instead of 10 > use an attribute defined in Race Class
+        while len(horses) < num_horses:
             horse_selection = horse_df.sample(n=1).iloc[0]
 
             horse_id = horse_selection['horse_id']
@@ -38,7 +33,6 @@ class Horse:
                 horses.append(horse_object)
         return horses
 
-    # Will incorporate randomization to ensure that values will be different every time?
     def update_horse_stats(self):
         random_speed = random.uniform(30.0, 50.0)
         if self.horse_rating > 50:
