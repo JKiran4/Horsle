@@ -1,5 +1,3 @@
-#race_details.py - Work-in-progress version
-
 # Creating Race class
 class Race:
     id = 1
@@ -10,6 +8,7 @@ class Race:
         self.distance = distance
         self.prize = prize
         self.num_horses = num_horses # Number of horses of the race
+        self.horses = ''
         self.race_id = Race.id
         Race.id += 1
                                  
