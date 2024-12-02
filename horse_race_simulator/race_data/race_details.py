@@ -1,8 +1,9 @@
 # race_details.py
+
 from datetime import datetime
 from random import choice
-from track_data import Track
-from horse_stats import Horse
+from horse_race_simulator.race_data.track_data import Track
+from horse_race_simulator.race_data.horse_stats import Horse
 
 class Race:
     """A class representing a horse race (not the actual simulation)
