@@ -1,8 +1,8 @@
 # race_details.py
-
 from datetime import datetime
 from random import choice
 from track_data import Track
+from horse_stats import Horse
 
 class Race:
     """A class representing a horse race (not the actual simulation)
@@ -12,22 +12,23 @@ class Race:
         get_race_info(): Prints details about the race
     """
 
-    def __init__(self, num_horses = 5):
+    def __init__(self, num_horses=5):
         """Initialize race with race details."""
+        self.track = Track()
+        self.track.create_track() 
+        self.track.weather_factor()
 
-        # call track information from the track module
-        track = Track()
-        track.create_track() 
-        track.weather_factor()
-
-        self.venue = track.track_venue[0]
-        self.distance = track.track_venue[1]
-        self.weather = track.track_weather[0]
+        self.venue = self.track.track_venue[0]
+        self.distance = self.track.track_venue[1]
+        self.weather = self.track.track_weather[0]
 
         self.date = datetime.now().strftime("%Y-%m-%d") 
         self.prize = choice(range(5000, 25001, 5000)) 
         self.num_horses = num_horses
-        self.race_id = Race.id
+        self.race_id = id(self)
+
+        # Create horses based on the number of horses for this race
+        self.horses = [Horse.create_horse("runs.csv") for _ in range(self.num_horses)]
 
     def set_date(self, date):
         """Change the date for the race
@@ -37,6 +38,7 @@ class Race:
         Returns:
            None
         """
+
         self.date = date
 
     def get_race_info(self):
@@ -46,11 +48,11 @@ class Race:
         Returns:
            print statement: A set of information for the race
         """
+
         print(f"Race ID: {self.race_id}\n"
-            f"Date: {self.date}\n"
-            f"Venue: {self.venue}\n"
-            f"Distance: {self.distance}m\n"
-            f"Weather: {self.weather}\n"
-            f"Prize: ${self.prize}\n"
-            f"Number of horses: {self.num_horses}\n"
-        )
+              f"Date: {self.date}\n"
+              f"Venue: {self.venue}\n"
+              f"Distance: {self.distance}m\n"
+              f"Weather: {self.weather}\n"
+              f"Prize: ${self.prize}\n"
+              f"Number of horses: {self.num_horses}\n")
