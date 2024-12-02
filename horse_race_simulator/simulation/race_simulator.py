@@ -1,12 +1,8 @@
-# race_simulator.py
-
-import random
+from random import random
 import turtle
-import time  # Added for timing functionality
+import time  # Added for race timing functionality
 
-from race_details import Race
-from track_data import TrackData
-from horse_stats import Horse
+from horse_race_simulator.race_data.race_details import Race
 
 class RaceSimulator:
     """A class representing race simulation
@@ -43,12 +39,13 @@ class RaceSimulator:
         self.final_results = {}  # Dictionary to store final results
 
     def draw_track(self, scaled_length):
-         """Creates track imagery used for race simulation.
+        """Creates track imagery used for race simulation.
         Args:
             scaled_length (float): Scaled length of the track used to show horse movement during race
         Returns:
             None
         """
+        
         # Create a track turtle for the main track
         track = turtle.Turtle()
         track.penup()
@@ -156,7 +153,7 @@ class RaceSimulator:
 
         for race_horse, horse in self.horse_objects:
             if race_horse not in self.finished_horses:
-                rand_chance = random.random()
+                rand_chance = random()
                 if rand_chance < 0.05:
                     move_distance = 0
                 elif rand_chance < 0.20:
@@ -207,6 +204,7 @@ class RaceSimulator:
         """
         self.race_setup()
         self.screen.ontimer(self.update_position, 50)
+        turtle.mainloop()
 
     def get_times(self):
         """Returns a dictionary of race times for each horse
@@ -224,25 +222,3 @@ class RaceSimulator:
                 "Leg 3 Time": result["leg_times"]["Third Leg"],
             }
         return times
-
-# test
-if __name__ == "__main__":
-    track = TrackData()
-    track.create_track()
-    track.weather_factor()
-
-    race_details = Race(date="2024-12-01", venue=track.track_venue[0], distance=track.track_venue[1], prize=5000, num_horses=5)
-    horses = Horse.create_horse("runs.csv", race_details.num_horses)
-    race_details.horses = horses
-
-    print(race_details.get_race_info())
-    print(race_details.display_horses())
-
-    race = RaceSimulator(race_details, track)
-    race.start_race()
-    turtle.mainloop()
-    print("\nRace Results:")
-    for horse_id, result in race.final_results.items():
-        print(f"Horse {horse_id}: Position: {result['final_position']}, "
-              f"Overall Time: {result['overall_time']}s, "
-              f"Leg Times: {result['leg_times']}")
