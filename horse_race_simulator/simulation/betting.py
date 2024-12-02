@@ -1,4 +1,3 @@
-# IN PROGRESS - KS
 # Data used to generate information imported from 'https://www.kaggle.com/datasets/gdaley/hkracing'
 
 class User:
@@ -53,7 +52,7 @@ if __name__ == "__main__":
     horse_choice = int(input(f"Choose a horse from {[horse.horse_id for horse in horses]}: "))
 
     bet_amount_placed = user.take_bet(bet, horse_choice, horses)
-    # Checks to make sure bet is valid 
+    # Checks to make sure bet is valid
     if bet_amount_placed is not None:
         race = TestRace(horses)
 
