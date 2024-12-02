@@ -28,17 +28,14 @@ simulation/ #subpackage2
   - start_race(self): starts race via race_setup and update_position methods
   - get_times(self): returns a dictionary of race times for each horse.
 - race_results.py
-  - __init__(self, race, horses, horse_timings): initialization
-  - get_horse_timing_data_frame(self, horse_timings): retrieves data frame with horse times
-  - get_horse_position(self, horse_timings, horse_id): finds a horse's position at race stage
-  - display_options(self): options for displaying results
-  - display_leaderboard(self): displays leaderboard of race results
-  - generate_race_summary(self): display the race summary
-  - get_horse_performance(self): retrieves performance details for specific horse
-  - get_horse_age(self, horse_id): retrieves horse age
-  - get_horse_type(self, horse_id): retrieves horse ID
-  - get_horse_weight(self, horse_id): retrieves horse weight
-  - get_horse_jockey(self, horse_id): retrieves jockey ID
+  - __init__(self, race, track): initialization
+  - getWinningHorseId(self): retrieves horse ID of winning horse.
+  - get_horse_timing_data_frame(self, horse_timings): retrieves data frame with horse times.
+  - get_horse_position(self, horse_timings, horse_id): finds a horse's position at race stage.
+  - display_options(self): options for displaying results.
+  - display_leaderboard(self): displays leaderboard of race results.
+  - generate_race_summary(self): display the race summary.
+  - get_horse_performance(self): retrieves performance details for specific horse.
 - betting.py
   - __init__(self, start_balance=1000): initialization
   - show_balance(self): shows users current balance
