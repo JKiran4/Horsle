@@ -18,10 +18,9 @@ class RaceResults:
         get_horse_weight(): retrieve horse weight
         get_horse_jockey(): retrieve horse jockey (the person riding the horse)
     """
-
-    # need to consolidate reading csv in one module
+    
     hist = pd.read_csv('runs.csv')
-    track_length = 50 # will conflict with track data module, check this
+    track_length = 50 # solely for display purposes
 
     def __init__(self, race, horses, horse_timings):
         """Initializes race results information"""
@@ -30,7 +29,6 @@ class RaceResults:
         self.horses = horses
         self.data = self.get_horse_timing_data_frame(horse_timings)
 
-    # why does this exist??
     def get_horse_timing_data_frame(self, horse_timings):
         """retrieves a data frame with the horse times across the race simulation
         Parameters:
@@ -53,7 +51,6 @@ class RaceResults:
         finish_times = []
         poisition = 1;
 
-        # how is this calculated? -> this doesn't really make sense, we're just finding the location of each step right????
         for horse_id, timings in horse_timings.items():
             horse_ids.append(horse_id)
             step1_location.append(RaceResults.track_length * 0.25 * (min_finish_time_first_leg/timings['Leg 1 Time']))
@@ -71,7 +68,6 @@ class RaceResults:
         horse_timing_data_set = {'horse_id': horse_ids, 'steps1': step1_location, 'steps2': step2_location, 'steps3': step3_location, 'steps4': step4_location,'result': final_position, 'finish_time': finish_times}
         return pd.DataFrame(horse_timing_data_set)
 
-    # is horse timings from the above function or the race simulation?
     def get_horse_position(self, horse_timings, horse_id):
         """retrieves a horses position
         Parameters:
@@ -92,7 +88,6 @@ class RaceResults:
         # If the horse_id is not found, return -1
         return -1
     
-    # will this work with betting?
     def display_options(self):
         """retrieves a horses position
         Parameters:
