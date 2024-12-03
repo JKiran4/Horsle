@@ -255,7 +255,7 @@ class RaceResults:
         print("------------------------------------------------------------")
         print(f"{'Metric':<20}{'Current race':<20}{'Past performance':<20}")
         print("------------------------------------------------------------")
-        print(f"{'Finish time':<20}{round(finish_time,2):<20}{round(average_finish_time,2):<20}")
+        print(f"{'Finish time (sec)':<20}{round(finish_time,2)/1000:<20}{round(average_finish_time,2)/1000:<20}")
         print(f"{'Rank':<20}{rank:<20}{average_rank:<20}")
         
     # supplementary methods?
