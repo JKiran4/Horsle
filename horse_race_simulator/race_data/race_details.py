@@ -1,5 +1,4 @@
 # race_details.py
-
 from datetime import datetime
 from random import choice
 from horse_race_simulator.race_data.track_data import Track
@@ -50,7 +49,8 @@ class Race:
            print statement: A set of information for the race
         """
 
-        print(f"Race ID: {self.race_id}\n"
+        print("\nOverview of today's race\n"
+              f"Race ID: {self.race_id}\n"
               f"Date: {self.date}\n"
               f"Venue: {self.venue}\n"
               f"Distance: {self.distance}m\n"
