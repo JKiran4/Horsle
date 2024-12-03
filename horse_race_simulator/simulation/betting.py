@@ -2,7 +2,7 @@
 
 from horse_race_simulator.simulation.race_simulator import RaceSimulation
 from horse_race_simulator.simulation.race_results import RaceResults
-from horse_race_simulator.race_data.race_details import Race  
+from horse_race_simulator.race_data.race_details import Race
 
 
 class User:
@@ -15,6 +15,9 @@ class User:
         """
         print("Welcome to Horsle, a horse race simulator with turtles!")
         while True:
+            if self.balance <= 0:
+                print("You have run out of money! Goodbye!")
+                break
             start_check = input("Type 'start' to begin the race or 'exit' to quit: ").lower()
             if start_check == "exit":
                 print("Thank you for racing! Goodbye!")
@@ -37,18 +40,19 @@ class User:
         race.get_race_info()
         track = race.track
 
-        print("+" + "-" * 105 + "+") 
+        print("+" + "-" * 105 + "+")
         print("|                                         Horses in Today`s race:                                         |")
-        print("+" + "-" * 105 + "+")  
+        print("+" + "-" * 105 + "+")
 
         for horse in race.horses:
             horse.get_horse_info()
 
         print("+" + "-" * 105 + "+")
 
-        bet, selected_horse_id = self.take_bet(race.horses)
-        if bet is None:
-            return
+        while bet is None:
+            bet, selected_horse_id = self.take_bet(race.horses)
+            if bet is None:
+                return
 
         # Run the race
         race_simulation = RaceSimulation(race, track)
@@ -74,7 +78,7 @@ class User:
         if not valid_horses:
             print(f"Invalid horse ID: {horse_choice}")
             return None
-        
+
         self.show_balance()
         bet = float(input("How much would you like to bet? $"))
         if bet > self.balance:
@@ -83,9 +87,9 @@ class User:
         if bet <= 0:
             print("Bet amount must be greater than zero.")
             return None
-        
+
         self.balance -= bet
-        
+
         print(f"You have placed a bet of ${bet} on horse {horse_choice}. The race will start shortly, good luck!\n")
 
         return bet, horse_choice
