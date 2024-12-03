@@ -6,12 +6,30 @@ from horse_race_simulator.race_data.race_details import Race
 
 
 class User:
+    """A class representing a User object.
+    Methods:
+        __init__(): Initializes 'User' instance.
+        race_welcome(): Opening prompt for the game.
+        run_game(): Consolidate the betting, race results and simulation into one method.
+        show_balance(): Show user balance for the instance.
+        take_bet(): Takes bet from user.
+        distribute_earnings(): Distribute earnings after the race is completed.
+    """
     def __init__(self, start_balance=1000):
+        """
+        Initializes instance of the 'User' class.
+    
+        Args:
+            start_balance (int): Start balance of user, with default value = 1000.
+        """
         self.balance = start_balance
 
     def race_welcome(self):
         """
-        Opening prompt for the game
+        Opening prompt for the game.
+
+        Args:
+            self : Instance of the class.
         """
         print("Welcome to Horsle, a horse race simulator with turtles!")
         while True:
@@ -34,7 +52,10 @@ class User:
 
     def run_game(self):
         """
-        Consolidate the betting, race results and sim into one method
+        Consolidate the betting, race results and simulation into one method.
+
+        Args:
+            self : Instance of the class.
         """
         race = Race()
         race.get_race_info()
@@ -71,9 +92,27 @@ class User:
         self.show_balance()
 
     def show_balance(self):
+        """
+        Show user's starting balance for the instance.
+    
+        Args:
+            self : Instance of the class.
+        """
         print(f"Your current balance is: ${self.balance:.2f}")
 
     def take_bet(self, horses):
+        """
+        Takes bet from user.
+    
+        Args:
+            self : Instance of the class.
+            horses (list) : List of Horse IDs for the current race.
+
+        Returns:
+            bet (int) : Bet value.
+            horse_choice (int) : Horse ID of horse selected by the user.
+            
+        """
 
         horse_choice = int(input(f"Choose a horse from {[horse.horse_id for horse in horses]}: "))
         valid_horses = [horse for horse in horses if horse.horse_id == horse_choice]
@@ -97,6 +136,17 @@ class User:
         return bet, horse_choice
 
     def distribute_earnings(self, bet, winning_horse_id, selected_horse_id, odds=2.0):
+         """
+        Distribute earnings after the race is completed.
+    
+        Args:
+            self : Instance of the class.
+            bet (int) : Bet value.
+            winning_horse_id (int) : Horse ID of winner of the race.
+            selected_horse_id (int) : Horse ID of horse selected by the user.
+            odds (int) : Odds of winning, default value set to 2.0.
+
+        """
         if winning_horse_id == selected_horse_id:
             winnings = bet * odds
             self.balance += winnings
