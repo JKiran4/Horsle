@@ -224,9 +224,10 @@ class RaceResults:
         for i in range(len(self.horses)):
             print(f"{position[i]:<10}{horse[i]:<15}")
             
-        horse_id_input = int(input("\nEnter a horse id to compare performance with past results or enter 'D' to exit: "))
-        if horse_id_input == '':
+        take_input = input("\nEnter a horse id to compare performance with past results or enter to exit: ")
+        if take_input == '':
             return None
+        horse_id_input = int(take_input)
         
         # Current race
         finish_time = self.data.loc[self.data['horse_id'] == horse_id_input,'finish_time'].iloc[0]
@@ -254,7 +255,7 @@ class RaceResults:
         print("------------------------------------------------------------")
         print(f"{'Metric':<20}{'Current race':<20}{'Past performance':<20}")
         print("------------------------------------------------------------")
-        print(f"{'Finish time (sec)':<20}{round(finish_time,2)/1000:<20}{round(average_finish_time,2)/1000:<20}")
+        print(f"{'Finish time (sec)':<20}{round(finish_time/1000,5):<20}{round(average_finish_time/1000,5):<20}")
         print(f"{'Rank':<20}{rank:<20}{average_rank:<20}")
         
     # supplementary methods
