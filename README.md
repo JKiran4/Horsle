@@ -1,5 +1,4 @@
-# Horse-Race-Simulator
-
+# Horsle
 Required libraries: turtle, time, pandas, random, datetime
 
 
