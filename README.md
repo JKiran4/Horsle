@@ -1,5 +1,6 @@
 # Horse-Race-Simulator
 
+Required libraries: turtle, time, pandas, random, datetime
 horse_race_simulator/ # package  
 
 race_data/ #subpackage1
