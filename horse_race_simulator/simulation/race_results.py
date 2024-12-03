@@ -12,7 +12,6 @@ class RaceResults:
         display_leaderboard(): displays a leaderboard of the race results
         generate_race_summary(): displays a detailed summary of the race
         get_horse_performance(): displays performance details for a specific horse
-        ---- do we need the methods below?
         get_horse_age(): retrieve horse age
         get_horse_type(): retrieve horse type (breed)
         get_horse_weight(): retrieve horse weight
@@ -258,7 +257,7 @@ class RaceResults:
         print(f"{'Finish time (sec)':<20}{round(finish_time,2)/1000:<20}{round(average_finish_time,2)/1000:<20}")
         print(f"{'Rank':<20}{rank:<20}{average_rank:<20}")
         
-    # supplementary methods?
+    # supplementary methods
     def get_horse_age(self, horse_id):
         for horse in self.horses:
             if horse.horse_id == horse_id:
