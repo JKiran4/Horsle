@@ -22,34 +22,36 @@ class User:
             elif start_check == "start":
                 self.run_game()
                 if self.balance <= 0:
-                    print("You have run out of money!")
+                    print("You have run out of money! Goodbye!")
                     break
                 run_again = input("Would you like to run another race? (Y/N): ").lower()
                 if run_again == "n":
-                    print("Thank you for playing! Goodbye.")
+                    print("Thank you for playing! Goodbye!")
                     break
 
     def run_game(self):
         """
         Consolidate the betting, race results and sim into one method
         """
-        self.show_balance()
-
-
         race = Race()
         race.get_race_info()
         track = race.track
-        race_simulation = RaceSimulation(race, track)  # Pass both race and track to simulation
 
-        print("\nHorses in today's race:")
+        print("+" + "-" * 105 + "+") 
+        print("|                                         Horses in Today`s race:                                         |")
+        print("+" + "-" * 105 + "+")  
+
         for horse in race.horses:
             horse.get_horse_info()
+
+        print("+" + "-" * 105 + "+")
 
         bet, selected_horse_id = self.take_bet(race.horses)
         if bet is None:
             return
 
         # Run the race
+        race_simulation = RaceSimulation(race, track)
         race_simulation.start_race()
         winning_horse_id = race_simulation.get_winning_horse_id()
         horse_times = race_simulation.get_times()
@@ -63,7 +65,7 @@ class User:
         self.show_balance()
 
     def show_balance(self):
-        print(f"Current Balance: ${self.balance}")
+        print(f"Your current balance is: ${self.balance:.2f}")
 
     def take_bet(self, horses):
 
@@ -73,7 +75,8 @@ class User:
             print(f"Invalid horse ID: {horse_choice}")
             return None
         
-        bet = float(input("Enter bet amount: $"))
+        self.show_balance()
+        bet = float(input("How much would you like to bet? $"))
         if bet > self.balance:
             print("Insufficient funds to place bet")
             return None
@@ -83,7 +86,7 @@ class User:
         
         self.balance -= bet
         
-        print(f"Bet of ${bet} placed on horse ID {horse_choice}.")
+        print(f"You have placed a bet of ${bet} on horse {horse_choice}. The race will start shortly, good luck!\n")
 
         return bet, horse_choice
 
@@ -91,6 +94,6 @@ class User:
         if winning_horse_id == selected_horse_id:
             winnings = bet * odds
             self.balance += winnings
-            print(f"Congratulations! Horse ID {selected_horse_id} won. You earned ${winnings:.2f}.")
+            print(f"\nCongratulations! Horse ID {selected_horse_id} won. You earned ${winnings:.2f}.")
         else:
-            print(f"Sorry, Horse ID {selected_horse_id} did not win. Your balance will be reduced by ${bet}.")
+            print(f"\nSorry, Horse ID {selected_horse_id} did not win. Your balance will be reduced by ${bet:.2f}.")
