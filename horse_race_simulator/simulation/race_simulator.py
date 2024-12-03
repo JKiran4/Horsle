@@ -1,10 +1,12 @@
+# race_simulator.py
+
 from random import random
 import turtle
-import time  # Added for race timing functionality
+import time
 
 from horse_race_simulator.race_data.race_details import Race
 
-class RaceSimulator:
+class RaceSimulation:
     """A class representing race simulation
     Methods:
         __init__(): Initializes simulation
@@ -222,3 +224,9 @@ class RaceSimulator:
                 "Leg 3 Time": result["leg_times"]["Third Leg"],
             }
         return times
+    
+    def get_winning_horse_id(self):
+
+        sorted_results = sorted(self.final_results.items(), key=lambda x: x[1]["final_position"])
+        winning_horse_id = sorted_results[0][0] 
+        return winning_horse_id
