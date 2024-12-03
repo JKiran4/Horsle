@@ -28,16 +28,17 @@ simulation/ #subpackage2
   - start_race(self): starts race via race_setup and update_position methods
   - get_times(self): returns a dictionary of race times for each horse.
 - race_results.py
-  - __init__(self, race, track): initialization
+  - __init__(self, race, horses, horse_timings): initialization
   - getWinningHorseId(self): retrieves horse ID of winning horse.
-  - get_horse_timing_data_frame(self, horse_timings): retrieves data frame with horse times.
-  - get_horse_position(self, horse_timings, horse_id): finds a horse's position at race stage.
-  - display_options(self): options for displaying results.
-  - display_leaderboard(self): displays leaderboard of race results.
-  - generate_race_summary(self): display the race summary.
-  - get_horse_performance(self): retrieves performance details for specific horse.
+  - get_horse_timing_data_frame(self, horse_timings): retrieves data frame with horse times
+  - get_horse_position(self, horse_timings, horse_id): finds a horse's position at race stage
+  - display_options(self): options for displaying results
+  - display_leaderboard(self): displays leaderboard of race results
+  - generate_race_summary(self): display the race summary
+  - get_horse_performance(self): retrieves performance details for specific horse
 - betting.py
   - __init__(self, start_balance=1000): initialization
+  - race_welcome(self, horses): issues user prompts in order to begin race and proceed
   - show_balance(self): shows users current balance
   - take_bet(self, bet, horse_id, horses): user input for bet - if 0 or horse_id invalid, does not accept bets
   - distribute_earnings(self, bet, winning_horse_id, selected_horse_id, odds=2.0): Assesses if selected horse wins race, if wins - adds bet to balance
