@@ -48,7 +48,9 @@ class User:
             horse.get_horse_info()
 
         print("+" + "-" * 105 + "+")
-
+        
+        selected_horse_id = None
+        bet = None
         while bet is None:
             bet, selected_horse_id = self.take_bet(race.horses)
             if bet is None:
