@@ -18,9 +18,9 @@ class RaceResults:
         get_horse_weight(): retrieve horse weight
         get_horse_jockey(): retrieve horse jockey (the person riding the horse)
     """
-    
+
     hist = pd.read_csv('runs.csv')
-    track_length = 50 # solely for display purposes
+    track_length = 50
 
     def __init__(self, race, horses, horse_timings):
         """Initializes race results information"""
@@ -97,14 +97,13 @@ class RaceResults:
         """
         while True:
             results_type = input(
-            """
-        
-            If you would like to see an overview of race, please select one of the options below, otherwise select 'D':\n
-            A: Leaderboard\n 
-            B: Overall summary\n 
-            C: Compare horse performance\n 
-            D: Exit\n
-            Enter your response:""")
+"""
+If you would like to see an overview of the race, please select one of the options below, otherwise select 'D': 
+A: Leaderboard
+B: Overall summary
+C: Compare horse performance
+D: Exit
+Enter your response:""")
             if results_type == 'A':
                 self.display_leaderboard()
             elif results_type == 'B':
@@ -131,15 +130,15 @@ class RaceResults:
         finish_time = sub_df['finish_time']
         
         # Display the leaderboard
-        print(f"🐢 Horse Race Leaderboard : {self.race_id}🐢")
-        print("------------------------------------------------------------")
+        print(f"\n🐢 Horse Race Leaderboard : {self.race_id}🐢")
+        print("-------------------------------------------------")
         print(f"{'Position':<10}{'Horse':<15}{'Time (s)':<10}")
-        print("------------------------------------------------------------")
+        print("-------------------------------------------------")
         for i in range(len(self.horses)):
             print(f"{position[i]:<10}{horse[i]:<15}{finish_time[i]:<10}")
     
         # Winner announcement
-        print(f"\n🎉 Winner: {horse[0]} with a time of {finish_time[0]/1000} seconds! 🎉")
+        print(f"\n🎉 Winner: {horse[0]} with a time of {finish_time[0]} seconds! 🎉")
 
     def generate_race_summary(self):
         """Display the race summary in detail includes attributes previously defined.
@@ -150,7 +149,7 @@ class RaceResults:
            """
         
         # Display the Performance results
-        print(f"🐢 Race summary : {self.race_id} 🐢")
+        print(f"\n🐢 Race summary : {self.race_id} 🐢")
         print("------------------------------------------------------------")
         
         # Display all race attributes
@@ -175,7 +174,7 @@ class RaceResults:
         
         # Display the race track
         for i, horse in enumerate(horses):
-            print(f"{horse}: " + "-" * positions[i] + "🐎" + "-" * (RaceResults.track_length - positions[i]))
+            print(f"{horse}: " + "-" * positions[i] + "🐢" + "-" * (RaceResults.track_length - positions[i]))
         
         print('\nStage 2:\n')
         step2 = self.data['steps2'].astype(int)
@@ -184,7 +183,7 @@ class RaceResults:
         
         # Display the race track
         for i, horse in enumerate(horses):
-            print(f"{horse}: " + "-" * positions[i] + "🐎" + "-" * (RaceResults.track_length - positions[i]))
+            print(f"{horse}: " + "-" * positions[i] + "🐢" + "-" * (RaceResults.track_length - positions[i]))
         
         
         print('\nStage 3:\n')
@@ -194,7 +193,7 @@ class RaceResults:
         
         # Display the race track
         for i, horse in enumerate(horses):
-            print(f"{horse}: " + "-" * positions[i] + "🐎" + "-" * (RaceResults.track_length - positions[i]))
+            print(f"{horse}: " + "-" * positions[i] + "🐢" + "-" * (RaceResults.track_length - positions[i]))
         
         print('\nStage 4:\n')
         step4 = self.data['steps4'].astype(int)
@@ -203,7 +202,7 @@ class RaceResults:
         
         # Display the race track
         for i, horse in enumerate(horses):
-            print(f"{horse}: " + "-" * positions[i] + "🐎" + "-" * (RaceResults.track_length - positions[i]))
+            print(f"{horse}: " + "-" * positions[i] + "🐢" + "-" * (RaceResults.track_length - positions[i]))
         
     def get_horse_performance(self):
         """Retrieve performance summary for a specific horse, can be called for every horse in the race 
@@ -258,7 +257,6 @@ class RaceResults:
         print(f"{'Finish time':<20}{round(finish_time,2):<20}{round(average_finish_time,2):<20}")
         print(f"{'Rank':<20}{rank:<20}{average_rank:<20}")
         
-    # supplementary methods?
     def get_horse_age(self, horse_id):
         for horse in self.horses:
             if horse.horse_id == horse_id:
