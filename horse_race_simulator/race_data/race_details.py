@@ -67,15 +67,14 @@ class Race:
         )
 
 class DelayedRace(Race):
-    """A subclass of Race representing a race that has been delayed."""
+    """A subclass of Race representing a race that has been delayed.
+    Methods:
+        __init__(): Initializes delayed race information
+        set_delayed_date(): set the new delayed date for the race
+        get_race_info(): get the race info with delay"""
     
     def __init__(self, num_horses = 5, delay_days = 3):
-        """Initialize a delayed race, which inherits from the Race class and allows setting a new date.
-        
-        Args:
-            num_horses (int): The number of horses in the race (default is 5).
-            delay_days (int): The number of days the race is delayed (default is 3).
-        """
+        """Initialize a delayed race, which inherits from the Race class and allows setting a new date."""
         super().__init__(num_horses)
         
         # Calculate the new date after applying the delay
@@ -83,12 +82,22 @@ class DelayedRace(Race):
         self.set_delayed_date()
 
     def set_delayed_date(self):
-        """Set the race date after applying the delay."""
+        """Get details about the race
+        Parameters:
+           self: the race object
+        Returns:
+           new date: the new date base don the delay
+        """
         current_date = datetime.strptime(self.date, "%Y-%m-%d")
         new_date = current_date + timedelta(days=self.delay_days)
         self.set_date(new_date.strftime("%Y-%m-%d"))
 
     def get_race_info(self):
-        """Prints details about the race, including the delayed date."""
+        """Get details about the race
+        Parameters:
+           self: the race object
+        Returns:
+           print statement: A set of information for the race with the delay accounted for
+        """
         print(f"\nDue to severe weather, the race was delayed by {self.delay_days} days")
         super().get_race_info()
