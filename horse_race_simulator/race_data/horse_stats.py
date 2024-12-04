@@ -1,73 +1,85 @@
-# track_data.py
+# horse_stats.py
 
-from random import choice
+from pandas import read_csv
+from random import uniform
 
-class Track:
-    """A class representing horse race track with venue options and weather factors
+class Horse:
+    """A class representing a Horse object.
     Methods:
-        __init__(): Intializes track data
-        create_track(): Establishes track venues
-        weather_factor(): Selects weather factor and corresponding impact on race
-        get_track_info(): Displays details about venue, distance, and weather
+        __init__(): Initializes 'Horse' instance.
+        create_horse(): Retreives a subset of horses from the Kaggle data set.
+        update_horse_stats(): Updates speed of a horse.
+        get_horse_info(): Displays horse details.
     """
 
-    def __init__(self):
-        """Initializes track data
-        Methods:
-            track_venue: Contains track venues and distances
-            track_weather: Contains weather factors and speed impact
-        """        
-        self.track_venue = None
-        self.track_weather = None
-        self.track_color = "DarkGreen" 
-
-    def create_track(self):
-        """Randomly selects track venue and corresponding race distance.
-        Stores details in track_venue.
-        Args:
-           self: track_data
-        Returns:
-           None
+    def __init__(self, horse_id, horse_age, actual_weight, horse_type, horse_rating, jockey_id):
         """
-
-        # key-value pairs of venues and corresponding distances (in m)
-        venues = {
-            "Pony Speedway": 1000,
-            "Canter Canyon": 1200, 
-            "Saddle Summit" : 1600, 
-            "Dusty Lanes": 1800, 
-            "Gallop Galley": 2200,
-            "Riders Run": 2400
-            }
-        
-        self.track_venue = choice(list(venues.items())) 
+        Initializes instance of the 'Horse' class.
     
-    def weather_factor(self):
-        """Randomly selects weather factors to apply to horse race and
-        corresponding impact the selected factor has on horse speed.
-        Stores details in track_weather.
         Args:
-           self: track_data
-        Returns:
-           None
-        """
-
-        # key-value pairs for weather and impact on the horse speed
-        weather = {
-            "Sunny": 0,
-            "Overcast": 0,
-            "Rainy": -10,
-            "Snowy": -5,
-        }
-
-        self.track_weather = choice(list(weather.items()))
-    
-    def get_track_info(self):
-        """Prints details about the track venue, distance and track weather
-        Args:
-           self: track_data
-        Returns:
-           None
+            horse_id (int): Horse ID.
+            horse_age (int): Horse age.
+            actual_weight (int): Actual weight of horse.
+            horse_type (str): Horse type such as Colt, Mare, Gelding etc.
+            horse_rating (int): Horse rating.
+            jockey_id (int): Jockey ID.
         """        
-        print(f"Track: {self.track_venue[0]}, Distance: {self.track_venue[1]}m")
-        print(f"Weather: {self.track_weather[0]}")
+
+        self.horse_id = horse_id
+        self.horse_age = horse_age
+        self.actual_weight = actual_weight
+        self.horse_type = horse_type
+        self.horse_rating = horse_rating
+        self.jockey_id = jockey_id
+        self.speed = self.update_horse_stats()
+
+    def create_horse(csv_filename):
+        """
+        Retreives a subset of horses from the given data set 'csv_filename'.
+    
+        Args:
+            csv_filename: Kaggle data set containing horse data.
+        """        
+
+        horse_df = read_csv(csv_filename)
+        horse_selection = horse_df.sample(n=1).iloc[0] # randomly taking one horse from the dataset
+
+        horse_id = horse_selection['horse_id']
+        horse_age = horse_selection['horse_age']
+        actual_weight = horse_selection['actual_weight']
+        horse_type = horse_selection['horse_type']
+        horse_rating = horse_selection['horse_rating']
+        jockey_id = horse_selection['jockey_id']
+
+        horse_object = Horse(horse_id, horse_age, actual_weight, horse_type, horse_rating, jockey_id)
+
+        return horse_object
+
+    def update_horse_stats(self):
+        """
+        Updates speed of a horse based on factors; horse rating, horse age, actual weight of a horse and uses randomization to ensure that values vary with each simulation.
+    
+        Args:
+            self: Instance of the class.
+        """
+        random_speed = uniform(30.0, 50.0)
+        if self.horse_rating > 50:
+            random_speed += 5
+        if self.horse_age < 3:
+            random_speed -= 2
+        elif self.horse_age > 5:
+            random_speed -= 5
+        elif self.actual_weight < 125:
+            random_speed += 5
+
+        return round(random_speed, 2)
+
+    def get_horse_info(self):
+        print(
+            f'| Horse ID: {self.horse_id:<4} | '
+            f' Age: {self.horse_age} years | '
+            f' Weight: {self.actual_weight} lbs | '
+            f' Type: {self.horse_type:<8} | '
+            f' Rating: {self.horse_rating:<3} | '
+            f' Speed: {self.speed:.2f} km/h |'
+        )
