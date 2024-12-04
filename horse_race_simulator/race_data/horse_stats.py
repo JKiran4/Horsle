@@ -75,6 +75,12 @@ class Horse:
         return round(random_speed, 2)
 
     def get_horse_info(self):
+        """
+        Prints out horse information.
+    
+        Args:
+            self: Instance of the class.
+        """
         print(
             f'| Horse ID: {self.horse_id:<4} | '
             f' Age: {self.horse_age} years | '
