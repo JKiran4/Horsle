@@ -19,6 +19,7 @@ class Track:
         """        
         self.track_venue = None
         self.track_weather = None
+        self.track_color = "DarkGreen" 
 
     def create_track(self):
         """Randomly selects track venue and corresponding race distance.
