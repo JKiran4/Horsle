@@ -1,5 +1,6 @@
 # race_details.py
 from datetime import datetime
+from datetime import timedelta
 from random import choice
 from horse_race_simulator.race_data.track_data import Track
 from horse_race_simulator.race_data.horse_stats import Horse
@@ -48,12 +49,46 @@ class Race:
         Returns:
            print statement: A set of information for the race
         """
+        width = 40
+        separator = "+" + "-" * (width - 2) + "+"
 
-        print("\nOverview of today's race\n"
-              f"Race ID: {self.race_id}\n"
-              f"Date: {self.date}\n"
-              f"Venue: {self.venue}\n"
-              f"Distance: {self.distance}m\n"
-              f"Weather: {self.weather}\n"
-              f"Prize: ${self.prize}\n"
-              f"Number of horses: {self.num_horses}\n")
+        print(
+            f"\n{separator}\n"
+            f"| {'      Overview of Today`s Race      '} |\n"  # Correctly centered title
+            f"{separator}\n"
+            f"| {'Race ID':<10} : {self.race_id:<23} |\n"
+            f"| {'Date':<10} : {self.date:<23} |\n"
+            f"| {'Venue':<10} : {self.venue:<23} |\n"
+            f"| {'Distance':<10} : {f'{self.distance}m':<23} |\n"
+            f"| {'Weather':<10} : {self.weather:<23} |\n"
+            f"| {'Prize':<10} : {f'${self.prize:,}':<23} |\n"
+            f"| {'Horses':<10} : {self.num_horses:<23} |\n"
+            f"{separator}"
+        )
+
+class DelayedRace(Race):
+    """A subclass of Race representing a race that has been delayed."""
+    
+    def __init__(self, num_horses = 5, delay_days = 3):
+        """Initialize a delayed race, which inherits from the Race class and allows setting a new date.
+        
+        Args:
+            num_horses (int): The number of horses in the race (default is 5).
+            delay_days (int): The number of days the race is delayed (default is 3).
+        """
+        super().__init__(num_horses)
+        
+        # Calculate the new date after applying the delay
+        self.delay_days = delay_days
+        self.set_delayed_date()
+
+    def set_delayed_date(self):
+        """Set the race date after applying the delay."""
+        current_date = datetime.strptime(self.date, "%Y-%m-%d")
+        new_date = current_date + timedelta(days=self.delay_days)
+        self.set_date(new_date.strftime("%Y-%m-%d"))
+
+    def get_race_info(self):
+        """Prints details about the race, including the delayed date."""
+        print(f"\nDue to severe weather, the race was delayed by {self.delay_days} days")
+        super().get_race_info()
