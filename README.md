@@ -1,7 +1,7 @@
 # Horsle
 Required libraries: turtle, time, pandas, random, datetime
 
-Executing the test file should run the whole program.
+Executing the test file should run the whole program. Make sure runs.csv is in the downlaoded package.
 
 Note that the race will only run once, but for added functionality, we may change the simulation library (turtle) so we can run games repeatedly without closing the program. Also, note that Macs have issues with the turtle library displaying the race, but it should still execute the program.
 
@@ -41,6 +41,7 @@ simulation/ #subpackage2
   - display_leaderboard(self): displays leaderboard of race results
   - generate_race_summary(self): display the race summary
   - get_horse_performance(self): retrieves performance details for specific horse
+  - various supplementary methods were included in this module for ease of functionality in the methods
 - betting.py
   - __init__(self, start_balance=1000): initialization
   - race_welcome(self): issues user prompts in order to begin race and proceed
