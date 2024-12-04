@@ -3,7 +3,7 @@ Required libraries: turtle, time, pandas, random, datetime
 
 Executing the test file should run the whole program.
 
-Note that the race will only run once, but for added functionality, we may change the simulation library (turtle) so we can run games repeatedly without closing the program.
+Note that the race will only run once, but for added functionality, we may change the simulation library (turtle) so we can run games repeatedly without closing the program. Also, note that Macs have issues with the turtle library displaying the race, but it should still execute the program.
 
 horse_race_simulator/ # package  
 
