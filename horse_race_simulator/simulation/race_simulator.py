@@ -103,7 +103,7 @@ class RaceSimulation:
             None
         """
         # Set up screen
-        self.screen.title("Horse Race Simulation")
+        self.screen.title("Horsle")
         self.screen.bgcolor("DarkGreen")
         self.screen.setup(width=800, height=600)
 
