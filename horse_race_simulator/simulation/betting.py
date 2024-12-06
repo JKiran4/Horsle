@@ -1,58 +1,165 @@
-# Data used to generate information imported from 'https://www.kaggle.com/datasets/gdaley/hkracing'
+# betting.py
+
+from horse_race_simulator.simulation.race_simulator import RaceSimulation
+from horse_race_simulator.simulation.race_results import RaceResults
+from horse_race_simulator.race_data.race_details import DelayedRace
+
 
 class User:
+    """A class representing a User object.
+    Methods:
+        __init__(): Initializes 'User' instance.
+        race_welcome(): Opening prompt for the game.
+        run_game(): Consolidate the betting, race results and simulation into one method.
+        show_balance(): Show user balance for the instance.
+        take_bet(): Takes bet from user.
+        distribute_earnings(): Distribute earnings after the race is completed.
+    """
     def __init__(self, start_balance=1000):
+        """
+        Initializes instance of the 'User' class.
+    
+        Args:
+            start_balance (int): Start balance of user, with default value = 1000.
+        """
         self.balance = start_balance
 
-    def race_welcome(self, horses):
-        print("Welcome to the Horse Race!")
+    def race_welcome(self):
+        """
+        Opening prompt for the game.
+
+        Args:
+            self : Instance of the class.
+        """
+        print("Welcome to Horsle, a horse race simulator with turtles!")
         while True:
             start_check = input("Type 'start' to begin the race or 'exit' to quit: ").lower()
             if start_check == "exit":
                 print("Thank you for racing! Goodbye!")
                 break
-            elif start_check == 'start':
-                self.show_balance()
-                bet_amount_placed = self.take_bet(horses)
-                continue
-            race = RaceSimulation.start_race(horses)
-            winning_horse_id = RaceResults.getWinningHorseId()
-            RaceResults.display_options()
-            self.distribute_earnings(self, bet, winning_horse_id, selected_horse_id, odds=2.0)
-            self.show_balance()
-            if self.balance <= 0:
-                print("You have run out of money!")
-                break
-            else:
-                run_again = input("Would you like to run another race? (Y/N): ").lower()
-                if run_again != 'n':
-                    print("Thank you for playing! Goodbye.")
+            elif start_check == "start":
+                self.run_game()
+                if self.balance <= 0:
+                    print("You have run out of money! Goodbye!")
+                    break
+                else:
+                    print("Thank you for playing! Goodbye!")
                     break
 
-    def show_balance(self):
-        print(f"Current Balance: ${self.balance}")
+    def run_game(self):
+        """
+        Consolidate the betting, race results and simulation into one method.
 
-    def take_bet(self, bet, horse_id, horses):
-        bet = float(input("Enter bet amount: $"))
-        horse_choice = int(input(f"Choose a horse from {[horse.horse_id for horse in horses]}: "))
-        if bet > self.balance:
-            print("Insufficient funds to place bet")
-            return None
-        if bet <= 0:
-            print("Bet amount must be greater than zero.")
-            return None
-        valid_horses = [horse for horse in horses if horse.horse_id == horse_id]
-        if not valid_horses:
-            print(f"Invalid horse ID: {horse_id}")
-            return None
+        Args:
+            self : Instance of the class.
+        """
+        race = DelayedRace()
+        race.get_race_info()
+        track = race.track
+
+        print("+" + "-" * 105 + "+")
+        print("|                                         Horses in Today`s race:                                         |")
+        print("+" + "-" * 105 + "+")
+
+        for horse in race.horses:
+            horse.get_horse_info()
+
+        print("+" + "-" * 105 + "+")
+        
+        selected_horse_id = None
+        bet = None
+        while bet is None:
+            bet, selected_horse_id = self.take_bet(race.horses)
+            if bet is None:
+                return
+
+        # Run the race
+        race_simulation = RaceSimulation(race, track)
+        race_simulation.start_race()
+        winning_horse_id = race_simulation.get_winning_horse_id()
+        horse_times = race_simulation.get_times()
+
+        # Display results and distribute earnings
+        self.distribute_earnings(bet, winning_horse_id, selected_horse_id)
+        self.show_balance()
+        results = RaceResults(race, race.horses, horse_times)
+        results.display_options()
+
+
+    def show_balance(self):
+        """
+        Show user's starting balance for the instance.
+    
+        Args:
+            self : Instance of the class.
+        """
+        print(f"Your balance is: ${self.balance:.2f}")
+
+    def take_bet(self, horses):
+        """
+        Takes bet from user.
+    
+        Args:
+            self : Instance of the class.
+            horses (list) : List of Horse IDs for the current race.
+
+        Returns:
+            bet (int) : Bet value.
+            horse_choice (int) : Horse ID of horse selected by the user.
+            
+        """
+
+        while True:
+            try:
+                horse_choice = int(input(f"Choose a horse from {[horse.horse_id for horse in horses]}: "))
+            
+                valid_horses = [horse for horse in horses if horse.horse_id == horse_choice]
+                if not valid_horses:
+                    print(f"Horse {horse_choice} is not in today's race. Please select a valid horse.")
+                    continue 
+                break
+            except ValueError:
+                print("Invalid input. Please enter a valid horse ID.")
+                continue
+
+        self.show_balance()
+
+        while True:
+            try:
+                bet = float(input("How much would you like to bet? $"))
+                
+                if bet > self.balance:
+                    print("Insufficient funds to place bet. Please enter a valid amount.")
+                    continue
+                elif bet <= 0:
+                    print("Bet amount must be greater than zero. Please enter a valid bet.")
+                    continue
+                break
+            except ValueError:
+                print("Invalid input. Please enter a valid numeric bet amount.")
+                continue
+
         self.balance -= bet
-        print(f"Bet of ${bet} placed on horse ID {horse_id}.")
-        return bet
+
+        print(f"You have placed a bet of ${bet:.2f} on horse {horse_choice}. The race will start shortly, good luck!\n")
+
+        return bet, horse_choice
 
     def distribute_earnings(self, bet, winning_horse_id, selected_horse_id, odds=2.0):
+        """
+        Distribute earnings after the race is completed.
+    
+        Args:
+            self : Instance of the class.
+            bet (int) : Bet value.
+            winning_horse_id (int) : Horse ID of winner of the race.
+            selected_horse_id (int) : Horse ID of horse selected by the user.
+            odds (int) : Odds of winning, default value set to 2.0.
+
+        """
         if winning_horse_id == selected_horse_id:
             winnings = bet * odds
             self.balance += winnings
-            print(f"Congratulations! Horse ID {selected_horse_id} won. You earned ${winnings:.2f}.")
+            print(f"\nCongratulations! Horse ID {selected_horse_id} won. You earned ${winnings:.2f}.")
         else:
-            print(f"Sorry, Horse ID {selected_horse_id} did not win. Your balance will be reduced by ${bet}.")
+            print(f"\nSorry, Horse ID {selected_horse_id} did not win. Your balance will be reduced by ${bet:.2f}.")
