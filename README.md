@@ -49,4 +49,3 @@ simulation/ #subpackage2
   - show_balance(self): shows users current balance
   - take_bet(self, bet, horse_id, horses): user input for bet - if 0 or horse_id invalid, does not accept bets
   - distribute_earnings(self, bet, winning_horse_id, selected_horse_id, odds=2.0): Assesses if selected horse wins race, if wins - adds bet to balance
-
