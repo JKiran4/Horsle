@@ -1,5 +1,9 @@
 # test_horse_stats.py
 
+import unittest
+from pandas import read_csv
+from random import uniform
+
 class TestHorse(unittest.TestCase):
 
     @classmethod
