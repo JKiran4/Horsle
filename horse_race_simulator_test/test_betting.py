@@ -10,10 +10,12 @@ class TestUser(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         print("setUpClass for testing.")
+        cls.test_user = User()
 
     @classmethod
     def tearDownClass(cls):
         print("tearDownClass after all testing")
+        del cls.test_user
 
     def setUp(self):
         print("setUp user for bet testing.")
