@@ -1,5 +1,3 @@
-import unittest
-
 from horse_race_simulator_test.test_horse_stats import TestHorse
 from horse_race_simulator_test.test_betting import TestUser
 
