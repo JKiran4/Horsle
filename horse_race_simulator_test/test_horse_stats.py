@@ -3,6 +3,7 @@
 import unittest
 from pandas import read_csv
 from random import uniform
+from horse_race_simulator.race_data.horse_stats import Horse
 
 class TestHorse(unittest.TestCase):
 

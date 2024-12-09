@@ -1,9 +1,7 @@
 # test_betting.py
 
 import unittest
-from horse_race_simulator.simulation.race_simulator import RaceSimulation
-from horse_race_simulator.race_data.race_details import RaceResults
-from horse_race_simulator.race_data.track_data import DelayedRace
+from horse_race_simulator.simulation.betting import User
 
 class TestUser(unittest.TestCase):
 
@@ -28,7 +26,7 @@ class TestUser(unittest.TestCase):
     def test_balance_horse_id(self):
         print("Running balance and horse testing")
         another_user = User(start_balance=500)
-        horse_choice = 3614 
+        horse_choice = 3614
         self.assertEqual(self.user.balance, 1000, "Initial balance should be 1000")
         self.assertEqual(another_user.balance, 500, "Initial balance should be 500 for another user")
         self.assertIsInstance(horse_choice, int, "Horse choice must be horse_id")
@@ -38,7 +36,7 @@ class TestUser(unittest.TestCase):
         print("Running bet testing")
         valid_bet = 50
         horse_choice = 3614
-        valid_horses = [3614, 3615, 3917]  
+        valid_horses = [3614, 3615, 3917]
         self.assertGreater(valid_bet, 0, "Bet should be a positive value")
         self.assertLessEqual(valid_bet, self.user.balance, "Bet cannot exceed balance")
         self.user.balance -= valid_bet
