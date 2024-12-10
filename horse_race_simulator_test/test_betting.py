@@ -32,7 +32,7 @@ class TestUser(unittest.TestCase):
         self.assertIsInstance(self.user.selected_horse_id, int, "Horse choice must be horse_id")
         self.assertGreater(self.user.selected_horse_id, 0, "Horse choice should be greater than 0")
 
-   def test_take_bet(self):
+    def test_take_bet(self):
         print("Running bet testing")
         valid_bet = 50
         horse_choice = 3614
