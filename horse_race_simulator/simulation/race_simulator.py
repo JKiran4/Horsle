@@ -4,8 +4,6 @@ from random import random
 import turtle
 import time
 
-from horse_race_simulator.race_data.race_details import Race
-
 class RaceSimulation:
     """A class representing race simulation
     Methods:

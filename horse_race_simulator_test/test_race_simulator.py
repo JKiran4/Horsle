@@ -10,16 +10,21 @@ class TestRaceSimulation(unittest.TestCase):
         seed(0)
         self.track = Track()
         self.track.create_track()
+        self.track.weather_factor()
         self.race = Race()
         self.simulation = RaceSimulation(self.race, self.track)
 
-    def test_race_setup(self):
-        print("Running test_race_setup")
-        self.simulation.race_setup()
+    def test_start_race(self): # covers race_setup and update_position
+        print("Running test_start_race")
+        self.simulation.start_race()
         self.assertIsNotNone(self.simulation.screen) # make sure the graphics screen opens
         self.assertGreater(self.track.track_venue[1] * 0.3, 0) # check that the scaled track is greater than 0
         self.assertEqual(self.simulation.finish_line, 0.3 * self.track.track_venue[1] / 2) # finish line calculation check
         self.assertEqual(len(self.simulation.leg_markers), 3) # making sure there are 3 legs in the race
+        for i, (race_horse, horse) in enumerate(self.simulation.horse_objects):
+            final_position = self.simulation.race_data[horse.horse_id]["final_position"]
+            self.assertGreaterEqual(final_position, 1) # check the positions are greater than or equal to 1
+            self.assertLessEqual(final_position, len(self.simulation.horse_objects)) # check that the positions aren't greater than the horses in the race
 
     def test_get_times(self):
         print("Running test_get_times")
