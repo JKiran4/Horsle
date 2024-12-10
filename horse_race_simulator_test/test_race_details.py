@@ -35,9 +35,9 @@ class TestRace(unittest.TestCase):
         self.num_horses = None
         self.race = None
     
-    def test_constructor(self): # To check deafult values
+    def test_constructor(self): # To check default values
         print("Running test_constructor")
-        # Check below variables are assigned
+        # Check member variables during the initialization of DelayedRace
         self.assertIsNotNone(self.race.track)
         self.assertIn(self.race.venue, self.venue_names) # check if venue name is in list
         self.assertIn(self.race.distance, self.venue_distances) # check if venue distance is in list
@@ -56,7 +56,7 @@ class TestRace(unittest.TestCase):
 
     def test_set_delayed_date(self):
         print("Running test_set_delayed_date")
-        # Check values before calling the function
+        # Check values of delay_days and date before calling the set_delayed_date function
         delay_days = 3
         current_date = self.today_date + timedelta(days=delay_days)
         current_date_str = current_date.strftime("%Y-%m-%d")
@@ -65,7 +65,7 @@ class TestRace(unittest.TestCase):
         delay_days = 5
         self.race.delay_days = delay_days
         self.race.set_delayed_date()
-        # Check values after calling the function
+        # Check values of delay_days and date after calling the set_delayed_date function
         new_date_str = (current_date + timedelta(days=(delay_days))).strftime("%Y-%m-%d")
         self.assertEqual(self.race.date, new_date_str)
         self.assertEqual(self.race.delay_days, delay_days)

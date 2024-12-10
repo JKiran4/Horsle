@@ -4,7 +4,7 @@ from horse_race_simulator_test.test_betting import TestUser
 from horse_race_simulator_test.test_track_data import TestTrack
 from horse_race_simulator_test.test_race_simulator import TestRaceSimulation
 from horse_race_simulator_test.test_race_details import TestRace
-from horse_race_simulator_test.test_race_results import TestRaceResult
+from horse_race_simulator_test.test_race_results import TestRaceResults
 
 def horse_suite(): # temporary name, please feel free to change if you have a preference
     suite = unittest.TestSuite()
@@ -23,13 +23,9 @@ def horse_suite(): # temporary name, please feel free to change if you have a pr
     suite.addTest(TestRace('test_set_delayed_date'))
     suite.addTest(TestRace('test_set_date'))
     suite.addTest(TestRace('test_get_race_info'))
-    suite.addTest(TestRaceResult('test_constructor'))
-    suite.addTest(TestRaceResult('test_get_horse_position'))
-    suite.addTest(TestRaceResult('test_display_options_exit'))
-    suite.addTest(TestRaceResult('test_get_horse_age'))
-    suite.addTest(TestRaceResult('test_get_horse_type'))
-    suite.addTest(TestRaceResult('test_get_horse_weight'))
-    suite.addTest(TestRaceResult('test_get_horse_jockey'))
+    suite.addTest(TestRaceResults('test_constructor'))
+    suite.addTest(TestRaceResults('test_get_horse_position'))
+    suite.addTest(TestRaceResults('test_display_options_and_getters'))
     runner = unittest.TextTestRunner()
     print(runner.run(suite))
 
