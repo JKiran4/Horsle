@@ -3,8 +3,5 @@ python:
 - "3.8"
 install:
 - pip install pandas
-- pip install random
-- pip install time
-- pip install datetime
 script:
 - python horse_suite.py
