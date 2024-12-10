@@ -18,7 +18,7 @@ class User:
     def __init__(self, start_balance=1000):
         """
         Initializes instance of the 'User' class.
-    
+
         Args:
             start_balance (int): Start balance of user, with default value = 1000.
         """
@@ -65,7 +65,7 @@ class User:
             horse.get_horse_info()
 
         print("+" + "-" * 105 + "+")
-        
+
         selected_horse_id = None
         bet = None
         while bet is None:
@@ -74,10 +74,14 @@ class User:
                 return
 
         # Run the race
-        race_simulation = RaceSimulation(race, track)
-        race_simulation.start_race()
-        winning_horse_id = race_simulation.get_winning_horse_id()
-        horse_times = race_simulation.get_times()
+        try:
+            race_simulation = RaceSimulation(race, track)
+            race_simulation.start_race()
+            winning_horse_id = race_simulation.get_winning_horse_id()
+            horse_times = race_simulation.get_times()
+        except Exception as e:
+            print(f"Error during race simulation: {e}"")
+            return
 
         # Display results and distribute earnings
         self.distribute_earnings(bet, winning_horse_id, selected_horse_id)
@@ -89,7 +93,7 @@ class User:
     def show_balance(self):
         """
         Show user's starting balance for the instance.
-    
+
         Args:
             self : Instance of the class.
         """
@@ -98,7 +102,7 @@ class User:
     def take_bet(self, horses):
         """
         Takes bet from user.
-    
+
         Args:
             self : Instance of the class.
             horses (list) : List of Horse IDs for the current race.
@@ -106,17 +110,17 @@ class User:
         Returns:
             bet (int) : Bet value.
             horse_choice (int) : Horse ID of horse selected by the user.
-            
+
         """
 
         while True:
             try:
                 horse_choice = int(input(f"Choose a horse from {[horse.horse_id for horse in horses]}: "))
-            
+
                 valid_horses = [horse for horse in horses if horse.horse_id == horse_choice]
                 if not valid_horses:
                     print(f"Horse {horse_choice} is not in today's race. Please select a valid horse.")
-                    continue 
+                    continue
                 break
             except ValueError:
                 print("Invalid input. Please enter a valid horse ID.")
@@ -127,7 +131,7 @@ class User:
         while True:
             try:
                 bet = float(input("How much would you like to bet? $"))
-                
+
                 if bet > self.balance:
                     print("Insufficient funds to place bet. Please enter a valid amount.")
                     continue
@@ -148,7 +152,7 @@ class User:
     def distribute_earnings(self, bet, winning_horse_id, selected_horse_id, odds=2.0):
         """
         Distribute earnings after the race is completed.
-    
+
         Args:
             self : Instance of the class.
             bet (int) : Bet value.
