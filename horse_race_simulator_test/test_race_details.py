@@ -12,9 +12,7 @@ class TestRace(unittest.TestCase):
         print("Setting up resources for the entire TestRace class")
         cls.today_date = datetime.now()
         cls.today_date_str = datetime.now().strftime("%Y-%m-%d")
-        cls.num_horses = 10
-        cls.race = DelayedRace(num_horses = cls.num_horses)  
-
+          
         cls.venue_names = ["Pony Speedway", "Canter Canyon", "Saddle Summit", "Dusty Lanes", "Gallop Galley", "Riders Run"]
         cls.venue_distances = [1000, 1200, 1600, 1800, 2200, 2400]
         cls.weather_conditions = ["Sunny", "Overcast", "Rainy", "Snowy"]
@@ -22,13 +20,20 @@ class TestRace(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         print("Tearing down shared resources.")
-        cls.race = None   
+        cls.today_date = None
+        cls.today_date_str = None
+        cls.venue_names = None
+        cls.weather_conditions = None
 
     def setUp(self):
         print("Setting up testcase.")
+        self.num_horses = 10
+        self.race = DelayedRace(num_horses = self.num_horses)
 
     def tearDown(self):
         print("Tearing down testcase.")
+        self.num_horses = None
+        self.race = None
     
     def test_constructor(self): # To check deafult values
         print("Running test_constructor")
@@ -51,19 +56,24 @@ class TestRace(unittest.TestCase):
 
     def test_set_delayed_date(self):
         print("Running test_set_delayed_date")
+        # Check values before calling the function
+        delay_days = 3
+        current_date = self.today_date + timedelta(days=delay_days)
+        current_date_str = current_date.strftime("%Y-%m-%d")
+        self.assertEqual(self.race.date, current_date_str)
+        self.assertEqual(self.race.delay_days, delay_days)
         delay_days = 5
         self.race.delay_days = delay_days
-        current_date = datetime.strptime(self.race.date, "%Y-%m-%d")
         self.race.set_delayed_date()
         # Check values after calling the function
+        new_date_str = (current_date + timedelta(days=(delay_days))).strftime("%Y-%m-%d")
+        self.assertEqual(self.race.date, new_date_str)
         self.assertEqual(self.race.delay_days, delay_days)
-        new_date = (current_date + timedelta(days=(delay_days))).strftime("%Y-%m-%d")
-        self.assertEqual(self.race.date, new_date)
 
     def test_set_date(self):
         print("Running test_set_date")
         # Check values before calling the function
-        self.assertNotEqual(self.race.date, self.today_date_str, "It should not match today's date since set_delayed_date was called in the earlier test case.")
+        self.assertNotEqual(self.race.date, self.today_date_str, "It should not match today's date since set_delayed_date was called in the constructor.")
         self.race.set_date(self.today_date_str)
         # Check values after calling the function
         self.assertEqual(self.race.date, self.today_date_str)
