@@ -6,17 +6,19 @@ from datetime import datetime
 from horse_race_simulator.race_data.horse_stats import Horse
 from horse_race_simulator.simulation.race_results import RaceResults
 
+#Mock class to use when testing RaceResults
 class Race:
     def __init__(self):
         self.race_id = "race1"
         self.date = datetime.now().strftime("%Y-%m-%d")
 
 # Assuming the Race class is already defined
-class TestRaceResult(unittest.TestCase):
+class TestRaceResults(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        print("Setting up resources for the entire TestRaceResult class")
+        #Setting up 3 mock Horse instances
+        print("Setting up resources for the entire TestRaceResults class")
         cls.horse1 = Horse(1001, 25, 50, "White", 1, 50)
         cls.horse2 = Horse(2002, 30, 55, "Brown", 2, 60)
         cls.horse3 = Horse(3003, 35, 50, "Red", 3, 70)
@@ -58,9 +60,9 @@ class TestRaceResult(unittest.TestCase):
     def tearDown(self):
         print("Tearing down testcase.")
 
-    def test_constructor(self): # To check deafult values
+    def test_constructor(self): # To check default values
         print("Running test_constructor")
-        # Check below variables are assigned
+        # Check member variables during the initialization of RaceResults
         self.assertIsNotNone(self.race_results.race_id)
         self.assertIsNotNone(self.race_results.date)
         self.assertIsNotNone(self.race_results.horses)
@@ -70,37 +72,35 @@ class TestRaceResult(unittest.TestCase):
         self.assertEqual(self.race_results.horses[1].horse_id, self.horses[1].horse_id)
 
     def test_get_horse_position(self):
-        print("Running test_set_delayed_date")
+        # Check position of each horse. Position is checked against horse_id
+        print("Running test_get_horse_position")
         position = self.race_results.get_horse_position(self.horse_times, self.horses[0].horse_id)
         self.assertEqual(position, 1)
         position = self.race_results.get_horse_position(self.horse_times, self.horses[1].horse_id)
         self.assertEqual(position, 2)
         position = self.race_results.get_horse_position(self.horse_times, self.horses[2].horse_id)
         self.assertEqual(position, 3)
+        # Check with invalid horse id
+        invalid_horse_id = 11
+        position = self.race_results.get_horse_position(self.horse_times, invalid_horse_id)
+        self.assertEqual(position, -1)
 
     @patch('builtins.input', side_effect=['A', 'B', 'C', 2002, 'D'])  # Mock input to simulate inputs
-    def test_display_options_exit(self, mock_input): # extra test, just making sure no exception raised when printing info
-        print("Running test_display_options_exit")
-        # Capture the return value of the method
+    def test_display_options_and_getters(self, mock_input):
+        print("Running test_display_options_and_getters")
+        # Capture the return value of the method (Note display_options method does not return any value)
         result = self.race_results.display_options()
         self.assertIsNone(result)
-
-    def test_get_horse_age(self):
+        # Testing all the getters used in display_options method with given horse_id
         print("Running get_horse_age")
         horse_age = self.race_results.get_horse_age(self.horses[0].horse_id)
         self.assertEqual(horse_age, self.horses[0].horse_age)
-
-    def test_get_horse_type(self):
         print("Running get_horse_type")
         horse_type = self.race_results.get_horse_type(self.horses[1].horse_id)
         self.assertEqual(horse_type, self.horses[1].horse_type)
-
-    def test_get_horse_weight(self):
         print("Running get_horse_weight")
         horse_weight = self.race_results.get_horse_weight(self.horses[2].horse_id)
         self.assertEqual(horse_weight, self.horses[2].actual_weight)
-
-    def test_get_horse_jockey(self):
         print("Running get_horse_jockey")
         jockey_id = self.race_results.get_horse_jockey(self.horses[0].horse_id)
         self.assertEqual(jockey_id, self.horses[0].jockey_id)
