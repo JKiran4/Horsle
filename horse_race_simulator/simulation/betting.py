@@ -80,7 +80,7 @@ class User:
             winning_horse_id = race_simulation.get_winning_horse_id()
             horse_times = race_simulation.get_times()
         except Exception as e:
-            print(f"Error during race simulation: {e}"")
+            print(f"Error during race simulation: {e}")
             return
 
         # Display results and distribute earnings
