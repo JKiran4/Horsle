@@ -16,7 +16,7 @@ def horse_suite(): # temporary name, please feel free to change if you have a pr
     suite.addTest(TestTrack('test_create_track'))
     suite.addTest(TestTrack('test_weather_factor'))
     suite.addTest(TestTrack('test_get_track_info'))
-    suite.addTest(TestRaceSimulation('test_race_setup'))
+    suite.addTest(TestRaceSimulation('test_start_race'))
     suite.addTest(TestRaceSimulation('test_get_times'))
     suite.addTest(TestRaceSimulation('test_get_winning_horse_id'))
     suite.addTest(TestRace('test_constructor'))
