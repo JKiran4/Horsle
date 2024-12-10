@@ -2,5 +2,11 @@ language: python
 python:
 - "3.4"
 - "3.5"
+install:
+- pip install pandas
+- pip install turtle
+- pip install random
+- pip install time
+- pip install datetime
 script:
 - python horse_suite.py
