@@ -29,7 +29,10 @@ class RaceSimulation:
             leg_markers: Marker positions for legs of race
             final_results: Dictionary of final horse race results
         """
-        self.screen = turtle.Screen()
+        try: # try-except block for step 3
+            self.screen = turtle.Screen()
+        except Exception as er:
+            print(f"Error initializing graphics window: {er}")
         self.track = track
         self.horses = race.horses
         self.horse_objects = []
@@ -179,17 +182,20 @@ class RaceSimulation:
 
                 # Finish line crossing
                 if race_horse.xcor() >= self.finish_line:
-                    if race_horse not in self.finished_horses:
-                        position = len(self.finished_horses) + 1
-                        self.finished_horses.append(race_horse)
-                        self.race_data[horse.horse_id]["final_position"] = position
-                        self.race_data[horse.horse_id]["overall_time"] = elapsed_time
-                        self.final_results[horse.horse_id] = {
-                            "final_position": position,
-                            "overall_time": round(elapsed_time, 2),
-                            "leg_times": {leg: round(time, 2) for leg, time in self.race_data[horse.horse_id]["leg_times"].items()}
-                        }
-                        print(f"Horse {horse.horse_id} has crossed the finish line!")
+                    try: # try-except block for step 3
+                        if race_horse not in self.finished_horses:
+                            position = len(self.finished_horses) + 1
+                            self.finished_horses.append(race_horse)
+                            self.race_data[horse.horse_id]["final_position"] = position
+                            self.race_data[horse.horse_id]["overall_time"] = elapsed_time
+                            self.final_results[horse.horse_id] = {
+                                "final_position": position,
+                                "overall_time": round(elapsed_time, 2),
+                                "leg_times": {leg: round(time, 2) for leg, time in self.race_data[horse.horse_id]["leg_times"].items()}
+                            }
+                            print(f"Horse {horse.horse_id} has crossed the finish line!")
+                    except Exception as er:
+                        print(f"Error processing final race data: {er}")
 
         if len(self.finished_horses) == len(self.horse_objects):
             self.screen.ontimer(self.screen.bye, 1000)  # Close the window after the race is done

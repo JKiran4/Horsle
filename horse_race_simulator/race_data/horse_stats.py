@@ -15,7 +15,7 @@ class Horse:
     def __init__(self, horse_id, horse_age, actual_weight, horse_type, horse_rating, jockey_id):
         """
         Initializes instance of the 'Horse' class.
-    
+
         Args:
             horse_id (int): Horse ID.
             horse_age (int): Horse age.
@@ -23,7 +23,7 @@ class Horse:
             horse_type (str): Horse type such as Colt, Mare, Gelding etc.
             horse_rating (int): Horse rating.
             jockey_id (int): Jockey ID.
-        """        
+        """
 
         self.horse_id = horse_id
         self.horse_age = horse_age
@@ -36,14 +36,21 @@ class Horse:
     def create_horse(csv_filename):
         """
         Retreives a subset of horses from the given data set 'csv_filename'.
-    
+
         Args:
             csv_filename: Kaggle data set containing horse data.
-        """        
-
-        horse_df = read_csv(csv_filename)
-        horse_selection = horse_df.sample(n=1).iloc[0] # randomly taking one horse from the dataset
-
+        """
+        try:
+            horse_df = read_csv(csv_filename)
+        except FileNotFoundError:
+            print(f"The file '{csv_filename}' was not found")
+            return None
+        try:
+            horse_selection = horse_df.sample(n=1).iloc[0] # randomly taking one horse from the dataset
+        except IndexError:
+            print("Issue with dataset")
+            return None
+            
         horse_id = horse_selection['horse_id']
         horse_age = horse_selection['horse_age']
         actual_weight = horse_selection['actual_weight']
@@ -58,7 +65,7 @@ class Horse:
     def update_horse_stats(self):
         """
         Updates speed of a horse based on factors; horse rating, horse age, actual weight of a horse and uses randomization to ensure that values vary with each simulation.
-    
+
         Args:
             self: Instance of the class.
         """
@@ -77,7 +84,7 @@ class Horse:
     def get_horse_info(self):
         """
         Prints out horse information.
-    
+
         Args:
             self: Instance of the class.
         """
