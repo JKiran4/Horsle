@@ -2,6 +2,10 @@
 
 import pandas as pd
 
+class InvalidInputError(Exception):
+    """Custom exception raised when input is not a valid input."""
+    pass
+
 class RaceResults:
     """A class representing the results of the race simulation
     Methods:
@@ -91,7 +95,8 @@ class RaceResults:
            method calls: calls specific methods depending on user input
         """
         while True:
-            results_type = input(
+            try:
+                results_type = input(
             """
         
 If you would like to see an overview of race, please select one of the options below, otherwise select 'D':\n
@@ -100,14 +105,21 @@ B: Overall summary
 C: Compare horse performance
 D: Exit\n
 Enter your selection: """)
-            if results_type == 'A':
-                self.display_leaderboard()
-            elif results_type == 'B':
-                self.generate_race_summary()
-            elif results_type == 'C':
-                self.get_horse_performance()
-            elif results_type == 'D':
-                return None
+                if results_type == 'A':
+                    self.display_leaderboard()
+                elif results_type == 'B':
+                    self.generate_race_summary()
+                elif results_type == 'C':
+                    self.get_horse_performance()
+                elif results_type == 'D':
+                    return None
+
+                if results_type != 'A' and results_type != 'B' and results_type != 'C' and results_type != 'D':
+                    raise InvalidInputError("\nInvalid input! please enter a valid input.")
+
+            except InvalidInputError as e:
+                # Handle the case where the invalid horse Id is given
+                print(e)
 
     def display_leaderboard(self):
         """creates a visual display for the horses and their corresponding performance after the race.
@@ -218,11 +230,26 @@ Enter your selection: """)
         print("------------------------------------------------------------")
         for i in range(len(self.horses)):
             print(f"{position[i]:<10}{horse[i]:<15}")
-            
-        take_input = input("\nEnter a horse id to compare performance with past results or enter to exit: ")
-        if take_input == '':
-            return None
-        horse_id_input = int(take_input)
+
+        horse_id_input = -1
+        while True:
+            try:
+                take_input = input("\nEnter a horse id to compare performance with past results or enter to exit: ")
+                if take_input == '':
+                    return None
+
+                horse_id_input = int(take_input)
+
+                if self.find_horse_by_id(take_input) == None:
+                    raise InvalidInputError("\nHorse id not in given list of horse ids.")
+
+                break;
+            except ValueError:
+                # If the input cannot be converted to an integer, raise a custom exception
+                print(f"\nInvalid input! '{take_input}' is not a valid horse id.")
+            except InvalidInputError as e:
+                # Handle the case where the invalid horse Id is given
+                print(e)
         
         # Current race
         finish_time = self.data.loc[self.data['horse_id'] == horse_id_input,'finish_time'].iloc[0]
@@ -254,6 +281,12 @@ Enter your selection: """)
         print(f"{'Rank':<20}{rank:<20}{average_rank:<20}")
         
     # supplementary methods
+    def find_horse_by_id(self, horse_id):
+        for horse in self.horses:
+            if horse.horse_id == horse_id:
+                return horse
+        return None
+    
     def get_horse_age(self, horse_id):
         for horse in self.horses:
             if horse.horse_id == horse_id:
