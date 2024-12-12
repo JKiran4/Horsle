@@ -115,7 +115,7 @@ class User:
 
         while True:
             try:
-                horse_choice = int(input(f"Choose a horse from {[horse.horse_id for horse in horses]}: "))
+                horse_choice = int(input(f"Choose a horse to place a bet on for today's race: "))
 
                 valid_horses = [horse for horse in horses if horse.horse_id == horse_choice]
                 if not valid_horses:
