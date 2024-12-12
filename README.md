@@ -1,6 +1,8 @@
 # Horsle
 [![Build Status](https://app.travis-ci.com/JKiran4/Horse-Race-Simulator.svg?token=puGRmUsVeyZRKzqBrQKR&branch=main)](https://app.travis-ci.com/JKiran4/Horse-Race-Simulator)
 
+Note that the coverage for betting is very low as it relies on all of the other modules to function - to make it sure it has coverage it would require us to overhaul our current test suite
+
 Required libraries: turtle, time, pandas, random, datetime
 
 Executing the test file should run the whole program. Make sure runs.csv is in the downlaoded package.
