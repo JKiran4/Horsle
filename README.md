@@ -1,4 +1,5 @@
 # Horsle
+[![Build Status](https://app.travis-ci.com/JKiran4/Horse-Race-Simulator.svg?token=puGRmUsVeyZRKzqBrQKR&branch=main)](https://app.travis-ci.com/JKiran4/Horse-Race-Simulator)
 Required libraries: turtle, time, pandas, random, datetime
 
 Executing the test file should run the whole program. Make sure runs.csv is in the downlaoded package.
