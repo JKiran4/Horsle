@@ -1,6 +1,7 @@
 # Horsle
 [![Build Status](https://app.travis-ci.com/JKiran4/Horse-Race-Simulator.svg?token=puGRmUsVeyZRKzqBrQKR&branch=main)](https://app.travis-ci.com/JKiran4/Horse-Race-Simulator)
 
+This package simulates a horse race using turtles with the turtle drawing package.
 Note that the coverage for betting is very low as it relies on all of the other modules to function - to make it sure it has coverage it would require us to overhaul our current test suite
 
 Required libraries: turtle, time, pandas, random, datetime
