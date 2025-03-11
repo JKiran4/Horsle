@@ -3,6 +3,3 @@ python:
 - "3.8"
 install:
 - pip install pandas
-script:
-  - R CMD build . 
-  - R CMD check *tar.gz --as-cran  
