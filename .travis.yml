@@ -4,4 +4,5 @@ python:
 install:
 - pip install pandas
 script:
-- python horse_suite.py
+  - R CMD build . 
+  - R CMD check *tar.gz --as-cran  
